@@ -1,8 +1,10 @@
 <script setup>
   import { getCurrentWindow } from '@tauri-apps/api/window';
+  import { ref } from 'vue';
 
   const is_tauri = '__TAURI_INTERNALS__' in window;
   let app_window = null;
+  const window_title = ref('Web Manager')
 
   if(is_tauri)
   {
@@ -93,18 +95,32 @@
   <div class="resize-corner bottom-right" @mousedown="handle_resize('SouthEast')"></div>
 
   <main>
-    <onyks-window-bar text="ONYKS Chalcedon" @mousedown="handle_dblclick_drag_title">
+    <onyks-window-bar :text="window_title" @mousedown="handle_dblclick_drag_title">
       <onyks-window-button type="minimalize" size="l" @click="handle_minimalize"></onyks-window-button>
       <onyks-window-button type="fullscreen" size="l" @click="handle_fullscreen"></onyks-window-button>
       <onyks-window-button type="close" size="l" @click="handle_close"></onyks-window-button>
     </onyks-window-bar>
     <div class="content">
       <onyks-strip-menu type="v">
-        <onyks-strip-menu-option icon="F425" marked></onyks-strip-menu-option>
-        <onyks-strip-menu-option icon="F10D"></onyks-strip-menu-option>
-        <onyks-strip-menu-option icon="F788"></onyks-strip-menu-option>
+        <router-link to="/">
+          <onyks-strip-menu-option icon="F425" :marked="$route.path === '/'" @click="window_title = 'Web Manager'"></onyks-strip-menu-option>
+        </router-link>
+
+        <router-link to="/repository">
+          <onyks-strip-menu-option icon="F10D" :marked="$route.path.startsWith('/repository')" @click="window_title = 'Repository'"></onyks-strip-menu-option>
+        </router-link>
+
+        <router-link to="/settings">
+          <onyks-strip-menu-option icon="F788" :marked="$route.path.startsWith('/settings')" @click="window_title = 'Settings'"></onyks-strip-menu-option>
+        </router-link>
       </onyks-strip-menu>
-      <div class="subcontent"></div>
+      <div class="subcontent">
+        <router-view v-slot="{ Component }">
+          <transition name="fade" mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </router-view>
+      </div>
     </div>
   </main>
 </template>
@@ -113,6 +129,7 @@
   main
   {
     height: 100vh;
+    overflow-y: hidden;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -122,8 +139,9 @@
 
   onyks-strip-menu
   {
-    height: 100%;
+    height: calc(100% - 2 * var(--spacing-md));
     box-sizing: border-box;
+    margin: var(--spacing-md) 0 var(--spacing-md) var(--spacing-md);
   }
 
   .content
@@ -136,15 +154,17 @@
     gap: var(--spacing-md);
     border-radius: 0 0 var(--radius-md) var(--radius-md);
     border: 1px solid var(--surface-border);
-    padding: var(--spacing-md);
+    overflow-y: hidden;
   }
 
   .subcontent
   {
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
     border-radius: var(--radius-md);
     /* background-color: red; */
+    overflow-y: scroll;
+    padding: var(--spacing-md);
   }
 
   .resize-edge, .resize-corner 
@@ -176,4 +196,22 @@
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
+
+  a
+  {
+    color: inherit;
+    text-decoration: inherit;
+  }
+</style>
+
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>

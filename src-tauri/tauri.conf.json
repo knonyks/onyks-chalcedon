@@ -15,13 +15,15 @@
         "title": "onyks-chalcedon",
         "width": 800,
         "height": 600,
+        "minWidth": 800,
+        "minHeight": 600,
         "decorations": false,
         "transparent": true,
         "resizable": true
       }
     ],
     "security": {
-      "csp": null,
+      "csp": "default-src 'self'; frame-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: *;",
       "capabilities": [
         "default",
         {
