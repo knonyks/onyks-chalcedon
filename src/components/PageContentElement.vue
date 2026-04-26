@@ -1,5 +1,13 @@
+<script lang="js">
+//     import { defineProps } from 'vue';
+// const props = defineProps(['title']);
+
+</script>
+
+
 <template>
     <div class="page">
+        <!-- <h1>{{ props.title }}</h1> -->
         <slot></slot>
     </div>
 </template>

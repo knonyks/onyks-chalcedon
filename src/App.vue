@@ -6,6 +6,8 @@
   let app_window = null;
   const window_title = ref('Web Manager')
 
+  const quit_dialog = ref(null)
+
   if(is_tauri)
   {
     app_window = getCurrentWindow(); 
@@ -98,7 +100,7 @@
     <onyks-window-bar :text="window_title" @mousedown="handle_dblclick_drag_title">
       <onyks-window-button type="minimalize" size="l" @click="handle_minimalize"></onyks-window-button>
       <onyks-window-button type="fullscreen" size="l" @click="handle_fullscreen"></onyks-window-button>
-      <onyks-window-button type="close" size="l" @click="handle_close"></onyks-window-button>
+      <onyks-window-button type="close" size="l" @click="quit_dialog.opened = true"></onyks-window-button>
     </onyks-window-bar>
     <div class="content">
       <onyks-strip-menu type="v">
@@ -123,6 +125,11 @@
       </div>
     </div>
   </main>
+  <onyks-dialog  id="quit_dialog" ref="quit_dialog" modal>
+    <p>Are you sure you want to quit?</p>
+    <onyks-button slot="footer" background="green" @click="handle_close">Yes</onyks-button>
+    <onyks-button slot="footer" background="red" onclick="quit_dialog.opened = false">No</onyks-button>
+  </onyks-dialog>
 </template>
 
 <style scoped>
@@ -201,6 +208,11 @@
   {
     color: inherit;
     text-decoration: inherit;
+  }
+
+  onyks-dialog > onyks-button
+  {
+    min-width: 100px;
   }
 </style>
 
