@@ -1,160 +1,179 @@
 <script setup>
-import { ref } from "vue";
-import { invoke } from "@tauri-apps/api/core";
+  import { getCurrentWindow } from '@tauri-apps/api/window';
 
-const greetMsg = ref("");
-const name = ref("");
+  const is_tauri = '__TAURI_INTERNALS__' in window;
+  let app_window = null;
 
-async function greet() {
-  // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-  greetMsg.value = await invoke("greet", { name: name.value });
-}
+  if(is_tauri)
+  {
+    app_window = getCurrentWindow(); 
+  }
+
+  const handle_close = async () => 
+  {
+    try 
+    {
+      await app_window.close();
+    } 
+    catch (error) 
+    {
+      alert(error);
+      console.error(error);
+    }
+  }
+
+  const handle_minimalize = async () => 
+  {
+    try 
+    {
+      await app_window.minimize();
+    } 
+    catch (error) 
+    {
+      alert(error);
+      console.error(error);
+    }
+  }
+
+  const handle_fullscreen = async () => 
+  {
+    try 
+    {
+      await app_window.toggleMaximize()
+    } 
+    catch (error) 
+    {
+      alert(error);
+      console.error(error);
+    }
+  }
+
+  const handle_resize = async (direction) => 
+  {
+    if (is_tauri) 
+    {
+      try 
+      {
+        await getCurrentWindow().startResizeDragging(direction);
+      } 
+      catch (e) 
+      {
+        console.error(e);
+      }
+    }
+  }
+
+  const handle_dblclick_drag_title = async (e) => 
+  {
+    if (is_tauri) 
+    {
+      if (e.target.tagName === 'ONYKS-WINDOW-BUTTON') return;
+
+      if (e.detail === 2) 
+      {
+        await app_window.toggleMaximize(); 
+      } 
+      else if (e.detail === 1) 
+      {
+        await app_window.startDragging();
+      }
+    }
+  }
 </script>
 
 <template>
-  <main class="container">
-    <h1>Welcome to Tauri + Vue</h1>
+  <div class="resize-edge top" @mousedown="handle_resize('North')"></div>
+  <div class="resize-edge bottom" @mousedown="handle_resize('South')"></div>
+  <div class="resize-edge left" @mousedown="handle_resize('West')"></div>
+  <div class="resize-edge right" @mousedown="handle_resize('East')"></div>
 
-    <div class="row">
-      <a href="https://vitejs.dev" target="_blank">
-        <img src="/vite.svg" class="logo vite" alt="Vite logo" />
-      </a>
-      <a href="https://tauri.app" target="_blank">
-        <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-      </a>
-      <a href="https://vuejs.org/" target="_blank">
-        <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-      </a>
+  <div class="resize-corner top-left" @mousedown="handle_resize('NorthWest')"></div>
+  <div class="resize-corner top-right" @mousedown="handle_resize('NorthEast')"></div>
+  <div class="resize-corner bottom-left" @mousedown="handle_resize('SouthWest')"></div>
+  <div class="resize-corner bottom-right" @mousedown="handle_resize('SouthEast')"></div>
+
+  <main>
+    <onyks-window-bar text="ONYKS Chalcedon" @mousedown="handle_dblclick_drag_title">
+      <onyks-window-button type="minimalize" size="l" @click="handle_minimalize"></onyks-window-button>
+      <onyks-window-button type="fullscreen" size="l" @click="handle_fullscreen"></onyks-window-button>
+      <onyks-window-button type="close" size="l" @click="handle_close"></onyks-window-button>
+    </onyks-window-bar>
+    <div class="content">
+      <onyks-strip-menu type="v">
+        <onyks-strip-menu-option icon="F425" marked></onyks-strip-menu-option>
+        <onyks-strip-menu-option icon="F10D"></onyks-strip-menu-option>
+        <onyks-strip-menu-option icon="F788"></onyks-strip-menu-option>
+      </onyks-strip-menu>
+      <div class="subcontent"></div>
     </div>
-    <p>Click on the Tauri, Vite, and Vue logos to learn more.</p>
-
-    <form class="row" @submit.prevent="greet">
-      <input id="greet-input" v-model="name" placeholder="Enter a name..." />
-      <button type="submit">Greet</button>
-    </form>
-    <p>{{ greetMsg }}</p>
   </main>
 </template>
 
 <style scoped>
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
-}
-
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #249b73);
-}
-
-</style>
-<style>
-:root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
-
-  color: #0f0f0f;
-  background-color: #f6f6f6;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-}
-
-.container {
-  margin: 0;
-  padding-top: 10vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: 0.75s;
-}
-
-.logo.tauri:hover {
-  filter: drop-shadow(0 0 2em #24c8db);
-}
-
-.row {
-  display: flex;
-  justify-content: center;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-
-a:hover {
-  color: #535bf2;
-}
-
-h1 {
-  text-align: center;
-}
-
-input,
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  color: #0f0f0f;
-  background-color: #ffffff;
-  transition: border-color 0.25s;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-}
-
-button {
-  cursor: pointer;
-}
-
-button:hover {
-  border-color: #396cd8;
-}
-button:active {
-  border-color: #396cd8;
-  background-color: #e8e8e8;
-}
-
-input,
-button {
-  outline: none;
-}
-
-#greet-input {
-  margin-right: 5px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    color: #f6f6f6;
-    background-color: #2f2f2f;
+  main
+  {
+    height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--surface-base);
+    border-radius: var(--radius-md);
   }
 
-  a:hover {
-    color: #24c8db;
+  onyks-strip-menu
+  {
+    height: 100%;
+    box-sizing: border-box;
   }
 
-  input,
-  button {
-    color: #ffffff;
-    background-color: #0f0f0f98;
+  .content
+  {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    gap: var(--spacing-md);
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    border: 1px solid var(--surface-border);
+    padding: var(--spacing-md);
   }
-  button:active {
-    background-color: #0f0f0f69;
-  }
-}
 
+  .subcontent
+  {
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-md);
+    /* background-color: red; */
+  }
+
+  .resize-edge, .resize-corner 
+  {
+    position: absolute;
+    z-index: 9999;
+    /* background-color: rgba(255, 0, 0, 0.4);  */
+  }
+
+  .resize-edge.top { top: 0; left: 0; right: 0; height: 6px; cursor: n-resize; }
+  .resize-edge.bottom { bottom: 0; left: 0; right: 0; height: 6px; cursor: s-resize; }
+  .resize-edge.left { top: 0; left: 0; bottom: 0; width: 6px; cursor: w-resize; }
+  .resize-edge.right { top: 0; right: 0; bottom: 0; width: 6px; cursor: e-resize; }
+
+  .resize-corner 
+  {
+    width: 14px;
+    height: 14px;
+    z-index: 10000;
+  }
+
+  .resize-corner.top-left { top: 0; left: 0; cursor: nw-resize; }
+  .resize-corner.top-right { top: 0; right: 0; cursor: ne-resize; }
+  .resize-corner.bottom-left { bottom: 0; left: 0; cursor: sw-resize; }
+  .resize-corner.bottom-right { bottom: 0; right: 0; cursor: se-resize; }
+
+  onyks-window-bar
+  {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 </style>

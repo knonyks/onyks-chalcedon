@@ -14,11 +14,29 @@
       {
         "title": "onyks-chalcedon",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "decorations": false,
+        "transparent": true,
+        "resizable": true
       }
     ],
     "security": {
-      "csp": null
+      "csp": null,
+      "capabilities": [
+        "default",
+        {
+          "identifier": "window-controls",
+          "windows": ["main"],
+          "permissions": [
+            "core:window:allow-close",
+            "core:window:allow-minimize",
+            "core:window:allow-maximize",
+            "core:window:allow-start-dragging",
+            "core:window:allow-toggle-maximize",
+            "core:window:allow-start-resize-dragging"
+          ]
+        }
+      ]
     }
   },
   "bundle": {
