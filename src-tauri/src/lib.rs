@@ -127,7 +127,7 @@ fn svn_update(svn_folder_path: &str, login: &str, password: &str) -> Result<Stri
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet, is_svn_repository, svn_checkout, svn_add_all, svn_commit, svn_update])
+        .invoke_handler(tauri::generate_handler![greet, is_svn_repository, svn_status, svn_checkout, svn_add_all, svn_commit, svn_update])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
