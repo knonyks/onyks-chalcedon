@@ -1,5 +1,6 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 use std::process::Command;
+use std::path::Path;
 
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -7,7 +8,40 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
-fn svn_checkout(svn_folder_path: &str, login: &str, password: &str, url: &str) -> Result<String, String> {
+fn is_svn_repository(svn_folder_path: &str) -> bool {
+    let path = Path::new(svn_folder_path).join(".svn");
+    path.is_dir() 
+}
+
+#[tauri::command]
+fn svn_status(svn_folder_path: &str) -> Result<Vec<String>, String> {
+    let output = Command::new("svn")
+        .current_dir(svn_folder_path)
+        .arg("status")
+        .output()
+        .map_err(|e| format!("Błąd uruchomienia: {}", e))?;
+    if output.status.success() {
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        let mut pliki = Vec::new();
+
+        for linia in stdout.lines() {
+            let czesci: Vec<&str> = linia.split_whitespace().collect();
+            
+            if czesci.len() >= 2 {
+                if let Some(sciezka) = czesci.last() {
+                    pliki.push(sciezka.to_string());
+                }
+            }
+        }
+        
+        Ok(pliki)
+    } else {
+        Err(String::from_utf8_lossy(&output.stderr).to_string())
+    }
+}
+
+#[tauri::command]
+fn svn_checkout(svn_folder_path: &str, login: &str, password: &str, url: &str) -> Result<Vec<String>, String> {
     let output = Command::new("svn")
         .current_dir(svn_folder_path) 
         .args([
@@ -21,14 +55,16 @@ fn svn_checkout(svn_folder_path: &str, login: &str, password: &str, url: &str) -
         .output()
         .map_err(|e| format!("Błąd wykonania komendy: {}", e))?;
     if output.status.success() {
-        Ok(String::from_utf8_lossy(&output.stdout).to_string())
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        let lista_linijek: Vec<String> = stdout.lines().map(|linia| linia.to_string()).collect();
+        Ok(lista_linijek)
     } else {
         Err(String::from_utf8_lossy(&output.stderr).to_string())
     }
 }
 
 #[tauri::command]
-fn svn_add_all(svn_folder_path: &str) -> Result<String, String> {
+fn svn_add_all(svn_folder_path: &str) -> Result<Vec<String>, String> {
     let output = Command::new("svn")
         .current_dir(svn_folder_path) 
         .args([
@@ -37,7 +73,9 @@ fn svn_add_all(svn_folder_path: &str) -> Result<String, String> {
         .output()
         .map_err(|e| format!("Błąd wykonania komendy: {}", e))?;
     if output.status.success() {
-        Ok(String::from_utf8_lossy(&output.stdout).to_string())
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        let lista_linijek: Vec<String> = stdout.lines().map(|linia| linia.to_string()).collect();
+        Ok(lista_linijek)
     } else {
         Err(String::from_utf8_lossy(&output.stderr).to_string())
     }
@@ -89,7 +127,7 @@ fn svn_update(svn_folder_path: &str, login: &str, password: &str) -> Result<Stri
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet,svn_checkout,svn_add_all,svn_commit,svn_update])
+        .invoke_handler(tauri::generate_handler![greet, is_svn_repository, svn_checkout, svn_add_all, svn_commit, svn_update])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
