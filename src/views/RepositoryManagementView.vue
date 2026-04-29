@@ -60,8 +60,19 @@
 
     const pull_btn = async () => 
     {
-        let result = null
-        result = await invoke('svn_checkout', {svnFolderPath: path.value, login: login.value, password: password.value, url: url.value})
+        try
+        {
+            path.value = value.value
+            let result = null
+            result = await invoke('svn_checkout', {svnFolderPath: path.value, login: login.value, password: password.value, url: url.value})
+            console.log(result)
+            ui_toast('SVN Update pulled!', 'success')
+        }
+        catch(e)
+        {
+            console.log(e)
+            ui_toast('SVN Error!', 'error')
+        }
     }
 
     const delete_btn = async () => 
