@@ -12,14 +12,13 @@ const ui_toast = (message, type = 'info') =>
 
 onMounted(() => 
 {
-    ui_toast('Settings saved successfully!', 'success')
+    ui_toast('Settings saved succesfully!', 'success')
 })
 
 </script>
 
 <template>
-    <PageContentElement>
-        <h1>Settings</h1>
+    <PageContentElement title="Settings">
 
         <div class="row">
             <onyks-button>Export</onyks-button>

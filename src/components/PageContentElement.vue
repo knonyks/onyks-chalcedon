@@ -1,13 +1,11 @@
-<script lang="js">
-//     import { defineProps } from 'vue';
-// const props = defineProps(['title']);
-
+<script setup lang="js">
+    const props = defineProps(['title'])
 </script>
 
 
 <template>
     <div class="page">
-        <!-- <h1>{{ props.title }}</h1> -->
+        <h1 class="title">{{ props.title }}</h1>
         <slot></slot>
     </div>
 </template>
@@ -21,7 +19,11 @@
         max-width: 1024px;
         margin: 0 auto 0 auto;
         height: auto;
-        /* height: 100%; */
-        /* padding: 0 0 0 var(--spacing-md); */
+
+    }
+
+    .title
+    {
+        padding: var(--spacing-xl) 0 var(--spacing-xl) 0;
     }
 </style>
