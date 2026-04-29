@@ -33,7 +33,6 @@ fn svn_status(svn_folder_path: &str) -> Result<Vec<String>, String> {
                 }
             }
         }
-        
         Ok(pliki)
     } else {
         Err(String::from_utf8_lossy(&output.stderr).to_string())
@@ -56,8 +55,17 @@ fn svn_checkout(svn_folder_path: &str, login: &str, password: &str, url: &str) -
         .map_err(|e| format!("Błąd wykonania komendy: {}", e))?;
     if output.status.success() {
         let stdout = String::from_utf8_lossy(&output.stdout);
-        let lista_linijek: Vec<String> = stdout.lines().map(|linia| linia.to_string()).collect();
-        Ok(lista_linijek)
+        let mut pliki = Vec::new();
+
+        for linia in stdout.lines() {
+            let czesci: Vec<&str> = linia.split_whitespace().collect();
+            if czesci.len() >= 2 {
+                let sciezka = czesci[1..].join(" ");
+                pliki.push(sciezka);
+            }
+        }
+        
+        Ok(pliki)
     } else {
         Err(String::from_utf8_lossy(&output.stderr).to_string())
     }
@@ -74,8 +82,17 @@ fn svn_add_all(svn_folder_path: &str) -> Result<Vec<String>, String> {
         .map_err(|e| format!("Błąd wykonania komendy: {}", e))?;
     if output.status.success() {
         let stdout = String::from_utf8_lossy(&output.stdout);
-        let lista_linijek: Vec<String> = stdout.lines().map(|linia| linia.to_string()).collect();
-        Ok(lista_linijek)
+        let mut pliki = Vec::new();
+
+        for linia in stdout.lines() {
+            let czesci: Vec<&str> = linia.split_whitespace().collect();
+            if czesci.len() >= 2 {
+                let sciezka = czesci[1..].join(" ");
+                
+                pliki.push(sciezka);
+            }
+        }
+        Ok(pliki)
     } else {
         Err(String::from_utf8_lossy(&output.stderr).to_string())
     }
