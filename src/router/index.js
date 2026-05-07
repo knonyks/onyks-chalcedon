@@ -1,24 +1,47 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+import StartView from '../views/StartView.vue'
+import ProfileView from '../views/ProfileView.vue'
 import SettingsView from '../views/SettingsView.vue'
-import RepositoryManagementView from '../views/RepositoryManagementView.vue'
-import ManagerSiteView from '../views/ManagerSiteView.vue'
+import RepositoryView from '../views/RepositoryView.vue'
+import WebManagerView from '../views/WebManagerView.vue'
 
 const routes = [
   {
-    path: '/settings',
-    name: 'Settings',
-    component: SettingsView
-  },
-  {
-    path: '/repository',
-    name: 'repository',
-    component: RepositoryManagementView
+    path: '/start',
+    name: 'Start',
+    component: StartView
   },
   {
     path: '/',
-    name: 'Manager',
-    component: ManagerSiteView
+    redirect: '/start'
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: ProfileView,
+    children: 
+    [
+      {
+        path: 'settings',
+        name: 'Settings',
+        component: SettingsView
+      },
+      {
+        path: 'repository',
+        name: 'Repository',
+        component: RepositoryView
+      },
+      {
+        path: 'manager',
+        name: 'WebManager',
+        component: WebManagerView
+      },
+      {
+        path: '',
+        redirect: { name: 'WebManager' }
+      }
+    ]
   }
 ]
 

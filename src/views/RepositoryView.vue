@@ -86,34 +86,48 @@
     }
 
 
+    const repository_path = ref(['a', 'b'])
     onMounted(async () => 
     {
-
+        // repository_path.value.content = ['a', 'b']
+        console.log(path.value.split('/'))
     })
 </script>
 
 
 <template>
     <PageContentElement title="Repository">
-        <onyks-textfield style="width: 100%;" :value="value" @input="(e) => value = e.target.value"></onyks-textfield>
+        <onyks-path size="m" :content="path.split('/').slice(1)"></onyks-path>
+        <onyks-alert type="info">Last update check: 14:15:22, 22.04.2025</onyks-alert>
         <div class="row">
             <onyks-file-explorer></onyks-file-explorer>
             <div class="btns">
                 <onyks-button background="green" @click="push_btn">Push</onyks-button>
                 <onyks-button background="purple"  @click="pull_btn">Pull</onyks-button>
-                <onyks-button background="red"  @click="delete_btn">Delete</onyks-button>
                 <onyks-button background="yellow"  @click="reset_btn">Reset</onyks-button>
             </div>
         </div>
+        <a href="google.com" target="_blank">Open repository in system explorer</a>
     </PageContentElement>
 </template>
 
 <style scoped>
+    onyks-path
+    {
+        pointer-events: none;
+    }
+
+    a
+    {
+        text-decoration: none;
+        color: inherit;
+    }
+
     .btns
     {
         display: flex;
         flex-direction: column;
-        gap: var(--spacing-md);
+        gap: var(--spacing-lg);
         min-width: 200px
     }
 
@@ -121,11 +135,12 @@
     {
         display: flex;
         flex-direction: row;
-        gap: var(--spacing-md);
+        gap: var(--spacing-lg);
     }
 
     onyks-file-explorer
     {
         width: 100%;
+        height: 200px;
     }
 </style>

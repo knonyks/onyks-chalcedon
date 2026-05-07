@@ -15,13 +15,12 @@
     {
         display: flex;
         flex-direction: column;
-        gap: var(--spacing-md);
         max-width: 1024px;
         margin: 0 auto 0 auto;
-        height: auto;
-
+        box-sizing: border-box;
+        gap: var(--spacing-lg);
     }
-
+    
     .title
     {
         padding: var(--spacing-xl) 0 var(--spacing-xl) 0;
