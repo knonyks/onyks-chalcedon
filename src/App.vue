@@ -3,7 +3,7 @@
   import { ref } from 'vue';
 
   const is_tauri = '__TAURI_INTERNALS__' in window;
-  const window_title = ref('Web Manager')
+  const window_title = ref('ONYKS Chalcedon');
   const quit_dialog = ref(null)
   
   let app_window = null;
@@ -105,7 +105,9 @@
     <div class="content">
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
-          <component :is="Component" />
+          <Suspense>
+            <component :is="Component" />
+          </Suspense>
         </transition>
       </router-view>
     </div>
@@ -117,7 +119,12 @@
   </onyks-dialog>
 </template>
 
-<style>
+<style scoped>
+  onyks-window-bar
+  {
+    z-index: 9999999;
+  }
+
   main
   {
     background-color: var(--surface-base);

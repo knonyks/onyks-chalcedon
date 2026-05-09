@@ -1,0 +1,17 @@
+{
+    "profiles": [
+        {
+            "id": "e4b3c2a1-1234-abcd",
+            "avatar": "🫠",
+            "name": "nazwa",
+            "login": "jan.kowalski",
+            "repository_path": "C:\\moje\\repo",
+            "repository_url": "https://git.server.com/repo",
+            "web_manager_url": "https://manager.server.com",
+            "auto_update": false,
+            "auto_update_interval": 1,
+            "auto_update_alert": false,
+            "last_use": "2025-01-01T22:23:00Z"
+        }
+    ]
+}

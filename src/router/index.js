@@ -5,6 +5,7 @@ import ProfileView from '../views/ProfileView.vue'
 import SettingsView from '../views/SettingsView.vue'
 import RepositoryView from '../views/RepositoryView.vue'
 import WebManagerView from '../views/WebManagerView.vue'
+import AddingProfileView from '../views/AddingProfileView.vue'
 
 const routes = [
   {
@@ -15,6 +16,11 @@ const routes = [
   {
     path: '/',
     redirect: '/start'
+  },
+  {
+    path: '/add-profile',
+    name: 'AddingProfile',
+    component: AddingProfileView
   },
   {
     path: '/profile',

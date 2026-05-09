@@ -5,7 +5,7 @@
 
 <template>
     <div class="page">
-        <h1 class="title">{{ props.title }}</h1>
+        <h1 class="title" v-if="props['title'] !== ''">{{ props.title }}</h1>
         <slot></slot>
     </div>
 </template>
