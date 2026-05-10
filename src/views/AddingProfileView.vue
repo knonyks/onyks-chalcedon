@@ -1,70 +1,49 @@
 <script setup>
-    import { ref } from 'vue';
-import AvatarPicker from '../components/AvatarPicker.vue';
+import PageContentElement from '../components/PageContentElement.vue';
+import { useRouter } from 'vue-router'
+import SettingsElement from '../components/SettingsElement.vue';
+import AvatarPicker from '../components/AvatarPicker.vue'
+import SettingsFastImportElement from '../components/SettingsFastImportElement.vue';
+
+const router = useRouter()
+
 </script>
 
 <template>
-    <div id="container">
-        <div id="form">
-            <h1 id="title">Creating a profile</h1>
-            <onyks-button id="import_btn" background="yellow">Fast Import</onyks-button>
-            <AvatarPicker></AvatarPicker>
-
-            <div class="row">
-                <div class="col">
-                    <h2>Username</h2>
-                    <onyks-textfield label="Username" placeholder="e.g. admin"></onyks-textfield>
+    <div class="container">
+        <div class="content">
+            <PageContentElement title="Creating a profile">
+                <onyks-alert type="info">You can fill or change later these settings.</onyks-alert>
+                <SettingsFastImportElement></SettingsFastImportElement>
+                <h2>Avatar</h2>
+                <AvatarPicker></AvatarPicker>
+                <SettingsElement></SettingsElement>
+                <div class="row btns">
+                    <onyks-button background="green" id="creating_btn">Create</onyks-button>
+                    <onyks-button background="red" id="import_btn" @click="router.push('/start')">Return</onyks-button>
                 </div>
-                <div class="col">
-                    <h2>Password</h2>
-                    <onyks-textfield label="Password" type="password" placeholder="e.g. password"></onyks-textfield>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <h2>SVN URL</h2>
-                    <onyks-textfield label="SVN URL" placeholder="e.g. https://svn.example.com"></onyks-textfield>
-                </div>
-                <div class="col">
-                    <h2>Web Manager URL </h2>
-                    <onyks-textfield label="Web Manager URL" placeholder="e.g. https://webmanager.example.com"></onyks-textfield>
-                </div>
-            </div>
-            <div class="row">
-                <onyks-button background="red" id="import_btn">Return</onyks-button>
-                <onyks-button background="green" id="creating_btn">Create</onyks-button>
-            </div>
+            </PageContentElement>
         </div>
     </div>
 </template>
 
 <style scoped>
-    #container
+    .container
     {
-        width: 100%;
         height: 100%;
         overflow-y: auto;
+        box-sizing: border-box;
+        /* padding: var(--spacing-lg); */
     }
 
-    #form
+    .content
     {
-        padding: var(--spacing-lg);
-        display: flex;
-        flex-direction: column;
-        gap: var(--spacing-lg);
         max-width: 800px;
-        margin: 0 auto 0 auto;
-    }
-
-    #title
-    {
-        padding: var(--spacing-lg) 0 var(--spacing-lg) 0;
-    }
-
-
-    #import_btn
-    {
-        width: 150px;
+        box-sizing: border-box;
+        margin-left: auto;
+        margin-right: auto;
+        /* height: 100%; */
+        padding: var(--spacing-lg);
     }
 
     .row
@@ -72,7 +51,6 @@ import AvatarPicker from '../components/AvatarPicker.vue';
         display: flex;
         flex-direction: row;
         gap: var(--spacing-lg);
-        width: 100%;
     }
 
     .col
@@ -80,18 +58,15 @@ import AvatarPicker from '../components/AvatarPicker.vue';
         display: flex;
         flex-direction: column;
         gap: var(--spacing-lg);
-        width: 50%;
-        /* background-color: blue; */
     }
 
-    onyks-textfield
+    .btns
     {
-        width: 100%;
+        align-self: self-end;
     }
 
-    #creating_btn
+    onyks-button
     {
         width: 150px;
-        align-self: flex-end;
     }
 </style>

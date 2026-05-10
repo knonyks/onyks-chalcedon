@@ -1,16 +1,21 @@
+<script setup>
+    const props = defineProps(['avatar', 'name', 'lastUse', 'id'])
+
+</script>
+
 <template>
-    <onyks-list-element size="m">
+    <onyks-list-element size="l">
         <div class="row">
-            <onyks-avatar shape="square" type="emoji" src="🫠" size="xl"></onyks-avatar>
+            <onyks-avatar shape="square" type="emoji" :src="props.avatar" size="xl"></onyks-avatar>
             <div class="col">
-                <h3 class="profile-name">Marek Lowca Pieczarek</h3>
-                <div class="last-time-used">Last time used: 14:22, 22.04.2026</div>
+                <h3 class="name">{{ props.name }}</h3>
+                <div class="last-time-use">{{ props.lastUse}}</div>
             </div>
         </div>
     </onyks-list-element>
 </template>
 
-<style>
+<style scoped>
     .row 
     {
         display: flex;
@@ -25,14 +30,13 @@
         gap: var(--spacing-sm);
     }
 
-    .profile-name 
+    .name 
     {
         font-weight: bold;
     }
 
-    .last-time-used 
+    .last-time-use
     {
         font-size: var(--size-md);
     }
-
 </style>

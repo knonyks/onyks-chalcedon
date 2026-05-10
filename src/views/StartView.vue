@@ -3,11 +3,14 @@
     import { ref } from 'vue';
     import { getCurrentWindow } from '@tauri-apps/api/window';
     import { useRouter } from 'vue-router'
+    import { Profile, profile_create, profile_list, profile_delete, profile_edit, profile_get_settings } from '../settings';
+    import { DateTime } from "luxon";
 
     const is_tauri = '__TAURI_INTERNALS__' in window;
     const router = useRouter()
     const aboutDialog = ref(null);
     const settingsDialog = ref(null);
+    const profiles = ref(await profile_list())
 
     const openProfile = () => 
     {
@@ -28,7 +31,17 @@
     const removeProfile = () => 
     {
         console.log('remove profile')
-    }   
+    }
+
+
+    // console.log(await profile_list())
+    // let x = new Profile()
+    // x.avatar = "🤗"
+    // x.name = "Misiek"
+    // x.last_use = "2024-06-01T12:00:00Z"
+    // await profile_create(x)
+    // console.log(await profile_list())
+
 </script>
 
 <template>
@@ -43,15 +56,14 @@
             </div>
             <div class="panel">
                 <onyks-list>
-                    <ProfileListElement></ProfileListElement>
+                    <ProfileListElement v-for="profile in profiles" :name="profile.name" 
+                    :avatar="profile.avatar" :lastUse="'Last use: ' + DateTime.fromISO(profile.last_use, { zone: 'utc' }).setZone('Europe/Warsaw').toFormat('dd.MM.yyyy HH:mm')" :id="profile.id"/>
                 </onyks-list>
                 <div class="btns">
                     <onyks-button background="green" @click="openProfile" disabled>Open</onyks-button>
                     <onyks-button background="blue" @click="addProfile">Add</onyks-button>
                     <onyks-button background="purple" @click="editProfile" disabled>Edit</onyks-button>
                     <onyks-button background="red" @click="removeProfile" disabled>Remove</onyks-button>
-                    
-                    
                     <onyks-button background="yellow" @click="aboutDialog.opened = true">About</onyks-button>
                     <onyks-button background="orange" @click="settingsDialog.opened = true">Settings</onyks-button>
                 </div>
