@@ -4,8 +4,15 @@ import { useRouter } from 'vue-router'
 import SettingsElement from '../components/SettingsElement.vue';
 import AvatarPicker from '../components/AvatarPicker.vue'
 import SettingsFastImportElement from '../components/SettingsFastImportElement.vue';
+import { ref } from 'vue';
 
 const router = useRouter()
+const settings = ref(null)
+
+const import_handle = (e) =>
+{
+    settings.value.setSettings(e)
+}
 
 </script>
 
@@ -14,10 +21,10 @@ const router = useRouter()
         <div class="content">
             <PageContentElement title="Creating a profile">
                 <onyks-alert type="info">You can fill or change later these settings.</onyks-alert>
-                <SettingsFastImportElement></SettingsFastImportElement>
+                <SettingsFastImportElement @settings-import="import_handle"></SettingsFastImportElement>
                 <h2>Avatar</h2>
                 <AvatarPicker></AvatarPicker>
-                <SettingsElement></SettingsElement>
+                <SettingsElement ref="settings"></SettingsElement>
                 <div class="row btns">
                     <onyks-button background="green" id="creating_btn">Create</onyks-button>
                     <onyks-button background="red" id="import_btn" @click="router.push('/start')">Return</onyks-button>
