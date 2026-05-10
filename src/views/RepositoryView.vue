@@ -33,10 +33,11 @@ import { openPath, openUrl } from '@tauri-apps/plugin-opener';
 
     const path = ref(global_settings.current_user.repository_path)
     const login = ref(global_settings.current_user.login)
-    const password = ref('haslodlaservera321321')
+    const password = ref(global_settings.current_user.password)
     const url = ref(global_settings.current_user.repository_url)
     const value = ref('')
 
+    console.log(global_settings.current_user)
     const ui_toast = (message, type = 'info') => 
     {
         const new_toast = document.createElement('onyks-toast');
@@ -52,6 +53,7 @@ import { openPath, openUrl } from '@tauri-apps/plugin-opener';
         {
             console.log('push')
             let result = null
+            console.log(password.value)
             result = await invoke('svn_checkout', {svnFolderPath: path.value, login: login.value, password: password.value, url: url.value})
             result = await invoke('svn_add_all', {svnFolderPath: path.value})
             result = await invoke('svn_commit', {svnFolderPath: path.value, login: login.value, password: password.value, commitName: 'marek lowca pieczarek'})

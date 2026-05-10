@@ -3,13 +3,15 @@
     import { ref } from 'vue';
     import { getCurrentWindow } from '@tauri-apps/api/window';
     import { useRouter } from 'vue-router'
-    import { Profile, profile_create, profile_list, profile_delete, profile_edit, profile_get_settings, stronghold_get_record } from '../settings';
+    import { Profile, profile_create, profile_list, profile_delete, profile_edit, profile_get_settings, stronghold_get_record, settings_init, stronghold_init } from '../settings';
     import { DateTime } from "luxon";
 
     const is_tauri = '__TAURI_INTERNALS__' in window;
     const router = useRouter()
     const aboutDialog = ref(null);
     const settingsDialog = ref(null);
+    await settings_init()
+    await stronghold_init()
     const profiles = ref(await profile_list())
     import { inject } from 'vue';
     const global_settings = inject('global_settings');

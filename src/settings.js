@@ -10,8 +10,30 @@ const is_tauri = '__TAURI_INTERNALS__' in window;
 
 let settings = null;
 
-if (is_tauri)
+// if (is_tauri)
+// {
+//     settings = await load('settings.json', { autoSave: false });
+//     if(settings.get('profiles') === undefined)
+//     {
+//         settings.set('profiles', []);
+//     }
+//     if(settings.get('general') === undefined)
+//     {
+//         settings.set('general', {});
+//     }
+//     // await settings.set('profiles', []);
+// }
+// else
+// {
+//     settings = {
+//         profiles: []
+//     };
+// }
+
+export const settings_init = async () =>
 {
+    if (is_tauri)
+    {
     settings = await load('settings.json', { autoSave: false });
     if(settings.get('profiles') === undefined)
     {
@@ -22,12 +44,13 @@ if (is_tauri)
         settings.set('general', {});
     }
     // await settings.set('profiles', []);
-}
-else
-{
+    }
+    else
+    {
     settings = {
         profiles: []
     };
+    }
 }
 
 export class Profile
@@ -78,7 +101,7 @@ export const profile_edit = async (id, updatedProfile) =>
 }
 
 export const profile_list = () =>
-{
+{        
     return settings.get('profiles');
 }
 
@@ -127,15 +150,14 @@ export const profile_export = (profile, password) =>
 }
 
 
-
+let stronghold, client, store = null
 /// PASSWORD SECTION
-const stronghold_init = async () => 
+export const stronghold_init = async () => 
 {
   const vaultPath = `${await appDataDir()}/vault.hold`;
   const vaultPassword = 'temporary_stronghold';
-  const stronghold = await Stronghold.load(vaultPath, vaultPassword);
+  stronghold = await Stronghold.load(vaultPath, vaultPassword);
 
-  let client;
   const clientName = 'name your client';
   try 
   {
@@ -145,17 +167,17 @@ const stronghold_init = async () =>
   {
     client = await stronghold.createClient(clientName);
   }
-
-  return {
-    stronghold,
-    client,
-  };
+  store = client.getStore();
+//   return {
+//     stronghold,
+//     client,
+//   };
 };
 
 
 
-const { stronghold, client } = await stronghold_init();
-const store = client.getStore();
+// const { stronghold, client } = await stronghold_init();
+// const store = client.getStore();
 
 export async function stronghold_insert_record(key, value) 
 {
