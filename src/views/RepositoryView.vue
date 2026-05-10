@@ -3,6 +3,7 @@
     import { onMounted } from 'vue';
     import PageContentElement from '../components/PageContentElement.vue';
     import { ref } from 'vue';
+import { openPath, openUrl } from '@tauri-apps/plugin-opener';
 //     // const result = ref(null)
 //     const run = async () =>
 //     {
@@ -23,10 +24,17 @@
         
 
 //     }
-    const path = ref('/home/zero-jedynkowy/Obrazy/modyfikacje')
-    const login = ref('server_access')
+    const getFoldersList = (pathString) => {
+    return pathString.split(/[\\/]/).filter(Boolean);
+    }
+
+    import { inject } from 'vue';
+    const global_settings = inject('global_settings');
+
+    const path = ref(global_settings.current_user.repository_path)
+    const login = ref(global_settings.current_user.login)
     const password = ref('haslodlaservera321321')
-    const url = ref('http://localhost:8111/svn/elements')
+    const url = ref(global_settings.current_user.repository_url)
     const value = ref('')
 
     const ui_toast = (message, type = 'info') => 
@@ -43,7 +51,6 @@
         try
         {
             console.log('push')
-            path.value = value.value
             let result = null
             result = await invoke('svn_checkout', {svnFolderPath: path.value, login: login.value, password: password.value, url: url.value})
             result = await invoke('svn_add_all', {svnFolderPath: path.value})
@@ -60,10 +67,12 @@
 
     const pull_btn = async () => 
     {
+        console.log(path.value)
         try
         {
-            path.value = value.value
+            // path.value = value.value
             let result = null
+            console.log({svnFolderPath: path.value, login: login.value, password: password.value, url: url.value})
             result = await invoke('svn_checkout', {svnFolderPath: path.value, login: login.value, password: password.value, url: url.value})
             console.log(result)
             ui_toast('SVN Update pulled!', 'success')
@@ -92,12 +101,24 @@
         // repository_path.value.content = ['a', 'b']
         console.log(path.value.split('/'))
     })
+
+    const open_exp = async () =>
+    {
+        try {
+
+        await openPath(path.value);
+        
+        console.log("Eksplorator otwarty pomyślnie!");
+    } catch (error) {
+        console.error("Nie udało się otworzyć eksploratora:", error);
+    }
+    }
 </script>
 
 
 <template>
     <PageContentElement title="Repository">
-        <onyks-path size="m" :content="path.split('/').slice(1)"></onyks-path>
+        <onyks-path size="m" :content="getFoldersList(path)"></onyks-path>
         <onyks-alert type="info">Last update check: 14:15:22, 22.04.2025</onyks-alert>
         <div class="row">
             <onyks-file-explorer></onyks-file-explorer>
@@ -107,7 +128,7 @@
                 <onyks-button background="yellow"  @click="reset_btn">Reset</onyks-button>
             </div>
         </div>
-        <a href="google.com" target="_blank">Open repository in system explorer</a>
+        <a @click="open_exp">Open repository in system explorer</a>
     </PageContentElement>
 </template>
 

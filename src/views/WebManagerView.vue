@@ -1,9 +1,11 @@
 <script setup>
     import PageContentElement from '../components/PageContentElement.vue';
+    import { inject } from 'vue';
+    const global_settings = inject('global_settings');
 </script>
 
 <template>
-    <iframe class="web-frame" src="https://iframetest.com/"></iframe>
+    <iframe class="web-frame" :src="global_settings.current_user.web_manager_url"></iframe>
 </template>
 
 <style scoped>

@@ -1,10 +1,14 @@
 <script setup>
+    import { ref } from 'vue';
+    import { defineEmits } from 'vue';
     const props = defineProps(['avatar', 'name', 'lastUse', 'id'])
+    const emit = defineEmits(['marked'])
+    const marked=ref(false)
 
 </script>
 
 <template>
-    <onyks-list-element size="l">
+    <onyks-list-element size="l" :marked="marked" @click="() => {marked = !marked; emit('marked', [props.id, marked])}">
         <div class="row">
             <onyks-avatar shape="square" type="emoji" :src="props.avatar" size="xl"></onyks-avatar>
             <div class="col">

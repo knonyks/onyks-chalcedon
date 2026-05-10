@@ -5,6 +5,11 @@ import SettingsElement from '../components/SettingsElement.vue';
 import AvatarPicker from '../components/AvatarPicker.vue'
 import SettingsFastImportElement from '../components/SettingsFastImportElement.vue';
 import { ref } from 'vue';
+import { Profile, profile_create, stronghold_insert_record } from '../settings';
+import { DateTime } from 'luxon';
+import { inject } from 'vue';
+
+const global_settings = inject('global_settings');
 
 const router = useRouter()
 const settings = ref(null)
@@ -12,6 +17,21 @@ const settings = ref(null)
 const import_handle = (e) =>
 {
     settings.value.setSettings(e)
+}
+
+const avatar_element = ref(null)
+
+const create_profile = () =>
+{
+    let profile = new Profile()
+    profile.avatar = avatar_element.value.get_avatar()
+    const settingsData = settings.value.getSettings()
+    Object.assign(profile, settingsData)
+    profile.last_use = DateTime.now().toUTC().toISO()
+    profile_create(profile)
+    stronghold_insert_record(profile.id, profile.password)
+    global_settings.current_user = profile
+    router.push('/profile')
 }
 
 </script>
@@ -23,11 +43,11 @@ const import_handle = (e) =>
                 <onyks-alert type="info">You can fill or change later these settings.</onyks-alert>
                 <SettingsFastImportElement @settings-import="import_handle"></SettingsFastImportElement>
                 <h2>Avatar</h2>
-                <AvatarPicker></AvatarPicker>
+                <AvatarPicker ref="avatar_element"></AvatarPicker>
                 <SettingsElement ref="settings"></SettingsElement>
                 <div class="row btns">
-                    <onyks-button background="green" id="creating_btn">Create</onyks-button>
-                    <onyks-button background="red" id="import_btn" @click="router.push('/start')">Return</onyks-button>
+                    <onyks-button background="green" @click="create_profile">Create</onyks-button>
+                    <onyks-button background="red" @click="router.push('/start')">Return</onyks-button>
                 </div>
             </PageContentElement>
         </div>

@@ -1,11 +1,17 @@
 <script setup>
   import { getCurrentWindow } from '@tauri-apps/api/window';
   import { ref } from 'vue';
+  import { reactive, provide } from 'vue';
 
   const is_tauri = '__TAURI_INTERNALS__' in window;
   const window_title = ref('ONYKS Chalcedon');
   const quit_dialog = ref(null)
   
+  const global_settings = reactive({
+    current_user: {}
+  });
+  provide('global_settings', global_settings);
+
   let app_window = null;
   
   if(is_tauri)

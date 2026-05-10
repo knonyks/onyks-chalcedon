@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import router from '../router';
+import { inject } from 'vue';
+
+const global_settings = inject('global_settings');
 
 </script>
 
@@ -7,7 +10,7 @@ import router from '../router';
     <div class="profile-container">
         <onyks-strip-menu type="v" class="profile-menu">
 
-            <onyks-avatar shape="square" type="emoji" src="🫠"></onyks-avatar>
+            <onyks-avatar shape="square" type="emoji" :src="global_settings.current_user.avatar"></onyks-avatar>
 
             <router-link to="/profile">
                 <onyks-strip-menu-option icon="F425" :marked="$route.path === '/profile/manager'" @click="window_title = 'Web Manager'"></onyks-strip-menu-option>
@@ -19,6 +22,10 @@ import router from '../router';
 
             <router-link to="/profile/settings">
                 <onyks-strip-menu-option icon="F788" :marked="$route.path.endsWith('/profile/settings')" @click="window_title = 'Settings'"></onyks-strip-menu-option>
+            </router-link>
+
+            <router-link to="/start">
+                <onyks-strip-menu-option icon="F795"></onyks-strip-menu-option>
             </router-link>
         </onyks-strip-menu>
         

@@ -16,11 +16,22 @@
 
     const getSettings = () =>
     {
-        
+        return {
+            name: name.value?.value,
+            login: login.value?.value,
+            password: password.value?.value,
+            repository_url: svn_url.value?.value,
+            repository_path: svn_path.value?.value,
+            web_manager_url: web_manager_url.value?.value,
+            autoupdate: autoupdate_flag.value,
+            autoupdate_alert: autoupdate_alert.value?.checked,
+            autoupdate_interval: autoupdate_interval.value?.value
+        }
     }
 
     const setSettings = (obj) =>
     {
+        console.log('jestem')
         console.log(obj)
 
         if(obj.name != null && obj.name != undefined)
@@ -34,6 +45,7 @@
         if(obj.password != null && obj.password != undefined)
         {
             password.value.value = obj.password
+            console.log(obj.password)
         }
         if(obj.repository_url != null && obj.repository_url != undefined)
         {
@@ -41,7 +53,7 @@
         }
         if(obj.repository_path != null && obj.repository_path != undefined)
         {
-            svn_path.value.value = "sss"
+            svn_path.value.value = obj.repository_path
         }
         if(obj.web_manager_url != null && obj.web_manager_url != undefined)
         {
@@ -49,7 +61,7 @@
         }
         if(obj.autoupdate != null && obj.autoupdate != undefined)
         {
-            autoupdate_flag = obj.autoupdate
+            autoupdate.value.checked = obj.autoupdate
         }
         if(obj.autoupdate_alert != null && obj.autoupdate_alert != undefined)
         {
@@ -59,7 +71,6 @@
         {
             autoupdate_interval.value.value = obj.autoupdate_interval
         }
-        console.log('ss')
     }
 
     defineExpose({
@@ -105,7 +116,7 @@
             <div class="col inputs">
                 <div class="row alignCenter">
                     <h3>Autoupdate Alert</h3>
-                    <onyks-checkbox checked="false" ref="autoupdate_alert"></onyks-checkbox>
+                    <onyks-checkbox  ref="autoupdate_alert"></onyks-checkbox>
                 </div>
             </div>
             <div class="row inputs alignCenter">

@@ -2,6 +2,9 @@ import { invoke } from '@tauri-apps/api/core';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { load } from '@tauri-apps/plugin-store';
 import { UUID } from "uuidjs";
+import { Client, Stronghold } from '@tauri-apps/plugin-stronghold';
+import { appDataDir } from '@tauri-apps/api/path';
+
 
 const is_tauri = '__TAURI_INTERNALS__' in window;
 
@@ -121,4 +124,47 @@ export const profile_export = (profile, password) =>
         console.error("!E!", error);
         return null;
     }
+}
+
+
+
+/// PASSWORD SECTION
+const stronghold_init = async () => 
+{
+  const vaultPath = `${await appDataDir()}/vault.hold`;
+  const vaultPassword = 'temporary_stronghold';
+  const stronghold = await Stronghold.load(vaultPath, vaultPassword);
+
+  let client;
+  const clientName = 'name your client';
+  try 
+  {
+    client = await stronghold.loadClient(clientName);
+  } 
+  catch 
+  {
+    client = await stronghold.createClient(clientName);
+  }
+
+  return {
+    stronghold,
+    client,
+  };
+};
+
+
+
+const { stronghold, client } = await stronghold_init();
+const store = client.getStore();
+
+export async function stronghold_insert_record(key, value) 
+{
+    const data = Array.from(new TextEncoder().encode(value));
+    await store.insert(key, data);
+}
+
+export async function stronghold_get_record(key)
+{
+    const data = await store.get(key);
+    return new TextDecoder().decode(new Uint8Array(data));
 }

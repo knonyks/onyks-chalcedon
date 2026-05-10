@@ -3,7 +3,7 @@
     import { ref } from 'vue';
     import { getCurrentWindow } from '@tauri-apps/api/window';
     import { useRouter } from 'vue-router'
-    import { Profile, profile_create, profile_list, profile_delete, profile_edit, profile_get_settings } from '../settings';
+    import { Profile, profile_create, profile_list, profile_delete, profile_edit, profile_get_settings, stronghold_get_record } from '../settings';
     import { DateTime } from "luxon";
 
     const is_tauri = '__TAURI_INTERNALS__' in window;
@@ -11,9 +11,15 @@
     const aboutDialog = ref(null);
     const settingsDialog = ref(null);
     const profiles = ref(await profile_list())
-
-    const openProfile = () => 
+    import { inject } from 'vue';
+    const global_settings = inject('global_settings');
+    const openProfile = async (e) => 
     {
+        
+        
+        console.log(await profile_get_settings(marked_ids.value.values().next().value))
+        global_settings.current_user = await profile_get_settings(marked_ids.value.values().next().value)
+        global_settings.current_user.password = await stronghold_get_record(marked_ids.value.values().next().value)
         router.push('/profile/manager')
     }
 
@@ -28,9 +34,44 @@
         console.log('edit profile')
     }
 
-    const removeProfile = () => 
+    const marked_counter = ref(0)
+    const marked_ids = ref(new Set())
+
+    const removeProfile = async () => 
     {
-        console.log('remove profile')
+
+    try {
+        for (const element of marked_ids.value) {
+            await profile_delete(element);
+        }
+
+
+        marked_ids.value.clear(); 
+        marked_counter.value = 0;
+
+        profiles.value = await profile_list();
+        
+    } catch (error) {
+        console.error(error);
+    }
+    }
+
+
+
+    const mark_profile = (e) =>
+    {
+        if(e[1])
+        {
+            marked_counter.value = marked_counter.value + 1;
+            marked_ids.value.add(e[0])
+
+        }
+        else
+        {
+            marked_counter.value = marked_counter.value - 1;
+            marked_ids.value.delete(e[0])
+        }
+        console.log(marked_ids.value)
     }
 
 
@@ -41,7 +82,6 @@
     // x.last_use = "2024-06-01T12:00:00Z"
     // await profile_create(x)
     // console.log(await profile_list())
-
 </script>
 
 <template>
@@ -56,14 +96,14 @@
             </div>
             <div class="panel">
                 <onyks-list>
-                    <ProfileListElement v-for="profile in profiles" :name="profile.name" 
+                    <ProfileListElement @marked="mark_profile" v-for="profile in profiles" :name="profile.name" 
                     :avatar="profile.avatar" :lastUse="'Last use: ' + DateTime.fromISO(profile.last_use, { zone: 'utc' }).setZone('Europe/Warsaw').toFormat('dd.MM.yyyy HH:mm')" :id="profile.id"/>
                 </onyks-list>
                 <div class="btns">
-                    <onyks-button background="green" @click="openProfile" disabled>Open</onyks-button>
+                    <onyks-button background="green" @click="openProfile" :disabled="!(marked_counter == 1)">Open</onyks-button>
                     <onyks-button background="blue" @click="addProfile">Add</onyks-button>
-                    <onyks-button background="purple" @click="editProfile" disabled>Edit</onyks-button>
-                    <onyks-button background="red" @click="removeProfile" disabled>Remove</onyks-button>
+                    <onyks-button background="purple" @click="editProfile" :disabled="!(marked_counter == 1)">Edit</onyks-button>
+                    <onyks-button background="red" @click="removeProfile" :disabled="!(marked_counter >= 1)">Remove</onyks-button>
                     <onyks-button background="yellow" @click="aboutDialog.opened = true">About</onyks-button>
                     <onyks-button background="orange" @click="settingsDialog.opened = true">Settings</onyks-button>
                 </div>
@@ -84,11 +124,6 @@
             <p>Soon.</p>
         </onyks-dialog>
 
-        <!-- <onyks-dialog  id="quit_dialog" ref="quit_dialog" modal title="Quit">
-            <p>Are you sure you want to quit?</p>
-            <onyks-button slot="footer" background="green" @click="handle_close">Yes</onyks-button>
-            <onyks-button slot="footer" background="red" onclick="quit_dialog.opened = false">No</onyks-button>
-        </onyks-dialog> -->
     </div>
 </template>
 

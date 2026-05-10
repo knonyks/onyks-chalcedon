@@ -1,5 +1,6 @@
 <script setup>
     import { ref } from 'vue';
+    import { defineExpose } from 'vue';
 
     const random_avatar = () => 
     {
@@ -8,6 +9,12 @@
     }
 
     const avatar = ref(random_avatar())
+
+    const get_avatar = () =>
+    {
+        return avatar.value
+    }
+    defineExpose({get_avatar})
 </script>
 
 <template>
