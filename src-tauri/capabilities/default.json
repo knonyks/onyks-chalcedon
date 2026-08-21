@@ -14,6 +14,12 @@
     {
       "identifier": "opener:allow-open-path",
       "allow": [{ "path": "$HOME/**" }]
-    }
+    },
+    "core:webview:allow-create-webview",
+    "core:webview:allow-webview-size",
+    "core:webview:allow-set-webview-size",
+    "core:webview:allow-set-webview-position",
+    "core:webview:allow-create-webview-window",
+    "core:window:allow-set-focus"
   ]
 }

@@ -1,74 +1,96 @@
-<script setup lang="ts">
-import router from '../router';
-import { inject } from 'vue';
+<script setup>
+    import { ref } from 'vue';
+    import AboutProgramDialog from '../components/AboutProgramDialog.vue';
+    import { WebviewWindow } from '@tauri-apps/api/webviewWindow';
 
-const global_settings = inject('global_settings');
+    const dialogs = ref({about: null})
+    let webManagerIsOpened = false
 
+    const openWebManager = () =>
+    {
+        const newWindow = new WebviewWindow('webManagerWindow', {
+            url: 'https://github.com/tauri-apps/tauri',
+            x: 0,
+            y: 0,
+            width: 800,
+            height: 600,
+            title: 'Web Manager'
+        });
+
+        newWindow.once('tauri://created', function () 
+        {
+            webManagerIsOpened = true
+        });
+
+        newWindow.once('tauri://error', function (e) 
+        {
+            webManagerIsOpened = false
+            console.error(e);
+        });
+
+        newWindow.onCloseRequested(() =>
+        {
+            webManagerIsOpened = false
+        });
+    }
+
+    const webManagerOpenAction = async () =>
+    {
+        if(webManagerIsOpened)
+        {
+            const temp = await WebviewWindow.getByLabel('webManagerWindow')
+            if (temp)
+            {
+                await temp.setFocus()
+            }
+        }
+        else
+        {
+            openWebManager()
+        }
+    }
 </script>
 
 <template>
-    <div class="profile-container">
-        <onyks-strip-menu type="v" class="profile-menu">
-
-            <onyks-avatar shape="square" type="emoji" :src="global_settings.current_user.avatar"></onyks-avatar>
-
-            <router-link to="/profile">
-                <onyks-strip-menu-option icon="F425" :marked="$route.path === '/profile/manager'" @click="window_title = 'Web Manager'"></onyks-strip-menu-option>
-            </router-link>
-
-            <router-link to="/profile/repository">
-                <onyks-strip-menu-option icon="F10D" :marked="$route.path.endsWith('/profile/repository')" @click="window_title = 'Repository'"></onyks-strip-menu-option>
-            </router-link>
-
-            <router-link to="/profile/settings">
-                <onyks-strip-menu-option icon="F788" :marked="$route.path.endsWith('/profile/settings')" @click="window_title = 'Settings'"></onyks-strip-menu-option>
-            </router-link>
-
-            <router-link to="/start">
-                <onyks-strip-menu-option icon="F795"></onyks-strip-menu-option>
-            </router-link>
+    <onyks-container type="group" gap="m" padding="m" class="container">
+        <onyks-strip-menu type="v">
+            <onyks-strip-menu-option size="m" icon="F43C" @click="webManagerOpenAction"></onyks-strip-menu-option>
+            <RouterLink to="/profile/repository"><onyks-strip-menu-option size="m" icon="F10D"></onyks-strip-menu-option></RouterLink>
+            <RouterLink to="/profile/settings"><onyks-strip-menu-option size="m" icon="F3E3"></onyks-strip-menu-option></RouterLink>
+            <onyks-strip-menu-option size="m" icon="F1C2"></onyks-strip-menu-option>
+            <onyks-strip-menu-option size="m" icon="F431" @click="dialogs.about.open"></onyks-strip-menu-option>
         </onyks-strip-menu>
-        
-        <div class="profile-content">
-            <router-view v-slot="{ Component }">
-                <transition name="fade" mode="out-in">
-                    <component :is="Component" />
-                </transition>
-            </router-view>
-        </div>
-    </div>
+        <onyks-container class="content" padding='' gap="m">
+            <router-view/>
+        </onyks-container>
+    </onyks-container>
+
+    <AboutProgramDialog :ref="(el) => {if(dialogs) dialogs.about = el}"></AboutProgramDialog>
 </template>
 
-<style>
-    .profile-container
+<style lang="css" scoped>
+    .container
     {
-        display: flex;
-        height: 100%;
-        width: 100%;
-        flex-direction: row;
-    }
-
-    .profile-menu
-    {
-        margin: var(--spacing-lg) 0 var(--spacing-lg) var(--spacing-lg);
-        height: calc(100% - var(--spacing-lg) * 2);
+        height: 100vh;
         box-sizing: border-box;
     }
 
-    .profile-content
+    onyks-strip-menu
+    {
+        height: 100%;
+        box-sizing: border-box;
+    }
+
+    .content
     {
         flex: 1;
-        padding: var(--spacing-lg);
-        overflow-y: auto;
+        box-sizing: border-box;
+        height: 100%;
     }
 
-    .fade-enter-active, .fade-leave-active 
+    a 
     {
-        transition: opacity 0.2s ease;
-    }
-
-    .fade-enter-from,.fade-leave-to 
-    {
-        opacity: 0;
+        color: inherit;
+        text-decoration: none;
     }
 </style>

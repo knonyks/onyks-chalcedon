@@ -1,11 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
 import StartView from '../views/StartView.vue'
 import ProfileView from '../views/ProfileView.vue'
-import SettingsView from '../views/SettingsView.vue'
-import RepositoryView from '../views/RepositoryView.vue'
-import WebManagerView from '../views/WebManagerView.vue'
-import AddingProfileView from '../views/AddingProfileView.vue'
+import RepositoryView from '../views/profile/RepositoryView.vue'
+import SettingsView from '../views/profile/SettingsView.vue'
 
 const routes = [
   {
@@ -15,12 +12,7 @@ const routes = [
   },
   {
     path: '/',
-    redirect: '/start'
-  },
-  {
-    path: '/add-profile',
-    name: 'AddingProfile',
-    component: AddingProfileView
+    redirect: '/profile/repository'
   },
   {
     path: '/profile',
@@ -29,24 +21,15 @@ const routes = [
     children: 
     [
       {
-        path: 'settings',
-        name: 'Settings',
-        component: SettingsView
-      },
-      {
         path: 'repository',
         name: 'Repository',
         component: RepositoryView
       },
       {
-        path: 'manager',
-        name: 'WebManager',
-        component: WebManagerView
+        path: 'settings',
+        name: 'Settings',
+        component: SettingsView
       },
-      {
-        path: '',
-        redirect: { name: 'WebManager' }
-      }
     ]
   }
 ]

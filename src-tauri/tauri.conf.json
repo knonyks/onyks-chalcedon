@@ -17,9 +17,7 @@
         "height": 600,
         "minWidth": 800,
         "minHeight": 600,
-        "decorations": false,
-        "transparent": true,
-        "resizable": true
+        "transparent": true
       }
     ],
     "security": {
@@ -35,7 +33,10 @@
             "core:window:allow-maximize",
             "core:window:allow-start-dragging",
             "core:window:allow-toggle-maximize",
-            "core:window:allow-start-resize-dragging"
+            "core:window:allow-start-resize-dragging",
+            "core:webview:allow-webview-close",
+            "core:webview:allow-webview-hide",
+            "core:window:allow-destroy"
           ]
         }
       ]
@@ -45,11 +46,7 @@
     "active": true,
     "targets": "all",
     "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
+      "../node_modules/onyks-web-ui/dist/icon.png"
     ]
   }
 }
