@@ -1,6 +1,6 @@
 <script setup>
     import ProfilePage from '../../components/ProfilePage.vue';
-
+    import ProgressDialog from '../../components/ProgressDialog.vue';
 </script>
 
 <template>
@@ -25,6 +25,7 @@
                 <onyks-button background="red">Delete</onyks-button>
             </onyks-container>
         </onyks-container>
+        <ProgressDialog></ProgressDialog>
     </ProfilePage>
 </template>
 

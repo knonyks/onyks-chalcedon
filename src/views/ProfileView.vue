@@ -2,14 +2,19 @@
     import { ref } from 'vue';
     import AboutProgramDialog from '../components/AboutProgramDialog.vue';
     import { WebviewWindow } from '@tauri-apps/api/webviewWindow';
+    import { useUserStore } from '../stores/user.js';
 
     const dialogs = ref({about: null})
+    const userStore = useUserStore()
+
     let webManagerIsOpened = false
+    
+
 
     const openWebManager = () =>
     {
         const newWindow = new WebviewWindow('webManagerWindow', {
-            url: 'https://github.com/tauri-apps/tauri',
+            url: userStore.webManagerAddress,
             x: 0,
             y: 0,
             width: 800,
@@ -52,15 +57,17 @@
 </script>
 
 <template>
-    <onyks-container type="group" gap="m" padding="m" class="container">
-        <onyks-strip-menu type="v">
-            <onyks-strip-menu-option size="m" icon="F43C" @click="webManagerOpenAction"></onyks-strip-menu-option>
-            <RouterLink to="/profile/repository"><onyks-strip-menu-option size="m" icon="F10D"></onyks-strip-menu-option></RouterLink>
-            <RouterLink to="/profile/settings"><onyks-strip-menu-option size="m" icon="F3E3"></onyks-strip-menu-option></RouterLink>
-            <onyks-strip-menu-option size="m" icon="F1C2"></onyks-strip-menu-option>
-            <onyks-strip-menu-option size="m" icon="F431" @click="dialogs.about.open"></onyks-strip-menu-option>
-        </onyks-strip-menu>
-        <onyks-container class="content" padding='' gap="m">
+    <onyks-container type="group" gap="" padding="" class="container">
+        <onyks-container padding="l" style="padding-right: 0;">
+            <onyks-strip-menu type="v">
+                <onyks-strip-menu-option size="m" icon="F43C" @click="webManagerOpenAction"></onyks-strip-menu-option>
+                <RouterLink to="/profile/repository"><onyks-strip-menu-option size="m" icon="F10D"></onyks-strip-menu-option></RouterLink>
+                <RouterLink to="/profile/settings"><onyks-strip-menu-option size="m" icon="F3E3"></onyks-strip-menu-option></RouterLink>
+                <onyks-strip-menu-option size="m" icon="F1C2"></onyks-strip-menu-option>
+                <onyks-strip-menu-option size="m" icon="F431" @click="dialogs.about.open"></onyks-strip-menu-option>
+            </onyks-strip-menu>
+        </onyks-container>
+        <onyks-container class="content" padding='' gap="m" style="overflow-y: auto;">
             <router-view/>
         </onyks-container>
     </onyks-container>

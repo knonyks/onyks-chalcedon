@@ -3,9 +3,9 @@
 </script>
 
 <template>
-    <onyks-container type="stack" gap="m" padding="">
+    <onyks-container type="stack" gap="m" padding="l">
         <onyks-header class="header">{{ props.title }}</onyks-header>
-        <onyks-container gap="l" class="content" padding="">
+        <onyks-container gap="l" class="content" padding="" >
             <slot></slot>
         </onyks-container>
     </onyks-container>
