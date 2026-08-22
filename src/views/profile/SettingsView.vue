@@ -2,6 +2,8 @@
     import ProfilePage from '../../components/ProfilePage.vue';
     import { useUserStore } from '../../stores/user.js';
     import { ref } from 'vue';
+    import { open } from '@tauri-apps/plugin-dialog';
+
 
     const userStore = useUserStore()
     const visibleSettings = ref(JSON.parse(JSON.stringify(userStore.$state)))
@@ -16,6 +18,16 @@
     const save = () =>
     {
         userStore.$patch(JSON.parse(JSON.stringify(visibleSettings.value)))
+    }
+
+    const chooseRepositoryPath = async () =>
+    {
+        const file = await open({
+            multiple: false,
+            directory: true,
+        });
+
+        visibleSettings.value.repository.path = file
     }
 </script>
 
@@ -70,8 +82,14 @@
             <onyks-textfield size="m" v-model="visibleSettings.repository.path" placeholder="e.g C:/User/repository" disabled></onyks-textfield>
         </onyks-container>
 
+
+
+
+
+
+        
         <onyks-container gap="m" type="group" align="center" justify="end" padding="">
-            <onyks-button background="yellow" @click="save">Select</onyks-button>
+            <onyks-button background="yellow" @click="chooseRepositoryPath">Select</onyks-button>
         </onyks-container>
 
         <onyks-container type="grid" cols="2" gap="l" padding="">

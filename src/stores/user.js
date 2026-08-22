@@ -3,21 +3,21 @@ import { ref } from 'vue'
 
 export const useUserStore = defineStore('user', () => 
 {
-    const login = ref('1')
-    const password = ref('2')
-    const webManagerAddress = ref('https://google.com')
+    const login = ref('')
+    const password = ref('')
+    const webManagerAddress = ref('')
 
     const repository = ref(
     {
-        address: '3',
+        address: '',
         autoupdate: false,
         autoupdateInterval: 0,
         lastLocalCheckUpdate: 0,
-        path: 'xx'
+        path: ''
     })
 
     const database = ref({
-        address: '4',
+        address: '',
         autoupdate: false,
         autoupdateInterval: 0,
         lastLocalCheckUpdate: 0
