@@ -177,16 +177,57 @@ fn svn_update(svn_folder_path: &str, login: &str, password: &str) -> Result<Stri
 }
 
 // #[tauri::command(async)]
-// fn svn_revert() -> Result<String, String> {
+// fn svn_revert(svn_folder_path: &str) -> Result<String, String> {
 //     #[cfg(target_os = "windows")]
 //     command.creation_flags(0x08000000);
 // }
 
 // #[tauri::command(async)]
-// fn svn_cleanup() -> Result<String, String> {
+// fn svn_cleanup(svn_folder_path: &str) -> Result<String, String> {
 //     #[cfg(target_os = "windows")]
 //     command.creation_flags(0x08000000);
 // }
+
+
+#[tauri::command(async)]
+fn svn_delete(svn_folder_path: &str) -> Result<String, String> {
+    let mut status_command = Command::new("svn");
+    #[cfg(target_os = "windows")]
+    status_command.creation_flags(0x08000000);
+
+    let status_output = status_command
+        .current_dir(svn_folder_path)
+        .arg("status")
+        .output()
+        .map_err(|e| format!("Błąd uruchomienia: {}", e))?;
+
+    if !status_output.status.success() {
+        return Err(String::from_utf8_lossy(&status_output.stderr).to_string());
+    }
+
+    let mut deleted_files = Vec::new();
+    for line in String::from_utf8_lossy(&status_output.stdout).lines() {
+        if let Some(path) = line.strip_prefix('!').map(str::trim_start) {
+            let mut delete_command = Command::new("svn");
+            #[cfg(target_os = "windows")]
+            delete_command.creation_flags(0x08000000);
+
+            let output = delete_command
+                .current_dir(svn_folder_path)
+                .args(["rm", path])
+                .output()
+                .map_err(|e| format!("Błąd wykonania komendy: {}", e))?;
+
+            if !output.status.success() {
+                return Err(String::from_utf8_lossy(&output.stderr).to_string());
+            }
+
+            deleted_files.push(path.to_string());
+        }
+    }
+
+    Ok(deleted_files.join("\n"))
+}
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -213,7 +254,8 @@ pub fn run() {
             svn_checkout,
             svn_add_all,
             svn_commit,
-            svn_update
+            svn_update,
+            svn_delete
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

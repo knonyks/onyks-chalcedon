@@ -74,6 +74,11 @@
         try
         {
             let answer = null
+            answer = await invoke('svn_delete', 
+            {
+                svnFolderPath: userStore.repository.path
+            })
+
             answer = await invoke('svn_add_all', 
             {
                 svnFolderPath: userStore.repository.path
