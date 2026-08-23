@@ -1,4 +1,5 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
+use std::os::windows::process::CommandExt;
 use std::path::Path;
 use std::process::Command;
 
@@ -9,15 +10,18 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 fn is_svn_repository(svn_folder_path: &str) -> bool {
     let path = Path::new(svn_folder_path).join(".svn");
     path.is_dir()
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 fn svn_status(svn_folder_path: &str) -> Result<Vec<String>, String> {
-    let output = Command::new("svn")
+    let mut command = Command::new("svn");
+    #[cfg(target_os = "windows")]
+    command.creation_flags(0x08000000);
+    let output = command
         .current_dir(svn_folder_path)
         .arg("status")
         .output()
@@ -41,19 +45,22 @@ fn svn_status(svn_folder_path: &str) -> Result<Vec<String>, String> {
     }
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 fn svn_checkout(
     svn_folder_path: &str,
     login: &str,
     password: &str,
     url: &str,
 ) -> Result<Vec<String>, String> {
-    let output = Command::new("svn")
+    let mut command = Command::new("svn");
+    #[cfg(target_os = "windows")]
+    command.creation_flags(0x08000000);
+    let output = command
         .current_dir(svn_folder_path)
         .args([
             "checkout",
             url,
-            ".",
+            svn_folder_path,
             "--username",
             login,
             "--password",
@@ -82,9 +89,12 @@ fn svn_checkout(
     }
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 fn svn_add_all(svn_folder_path: &str) -> Result<Vec<String>, String> {
-    let output = Command::new("svn")
+    let mut command = Command::new("svn");
+    #[cfg(target_os = "windows")]
+    command.creation_flags(0x08000000);
+    let output = command
         .current_dir(svn_folder_path)
         .args(["add", "--force", "."])
         .output()
@@ -107,14 +117,17 @@ fn svn_add_all(svn_folder_path: &str) -> Result<Vec<String>, String> {
     }
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 fn svn_commit(
     svn_folder_path: &str,
     login: &str,
     password: &str,
     commit_name: &str,
 ) -> Result<String, String> {
-    let output = Command::new("svn")
+    let mut command = Command::new("svn");
+    #[cfg(target_os = "windows")]
+    command.creation_flags(0x08000000);
+    let output = command
         .current_dir(svn_folder_path)
         .args([
             "commit",
@@ -137,9 +150,12 @@ fn svn_commit(
     }
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 fn svn_update(svn_folder_path: &str, login: &str, password: &str) -> Result<String, String> {
-    let output = Command::new("svn")
+    let mut command = Command::new("svn");
+    #[cfg(target_os = "windows")]
+    command.creation_flags(0x08000000);
+    let output = command
         .current_dir(svn_folder_path)
         .args([
             "update",
@@ -160,17 +176,31 @@ fn svn_update(svn_folder_path: &str, login: &str, password: &str) -> Result<Stri
     }
 }
 
+// #[tauri::command(async)]
+// fn svn_revert() -> Result<String, String> {
+//     #[cfg(target_os = "windows")]
+//     command.creation_flags(0x08000000);
+// }
+
+// #[tauri::command(async)]
+// fn svn_cleanup() -> Result<String, String> {
+//     #[cfg(target_os = "windows")]
+//     command.creation_flags(0x08000000);
+// }
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .setup(|app|{
+        .plugin(tauri_plugin_http::init())
+        .setup(|app| {
             let salt_path = app
                 .path()
                 .app_local_data_dir()
                 .expect("could not resolve app local data path")
                 .join("salt.txt");
-            
-            app.handle().plugin(tauri_plugin_stronghold::Builder::with_argon2(&salt_path).build())?;
+
+            app.handle()
+                .plugin(tauri_plugin_stronghold::Builder::with_argon2(&salt_path).build())?;
             Ok(())
         })
         .plugin(tauri_plugin_dialog::init())

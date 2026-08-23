@@ -45,4 +45,9 @@
         width: 128px;
         height: 128px;
     }
+
+    onyks-dialog
+    {
+        max-width: 200px;
+    }
 </style>

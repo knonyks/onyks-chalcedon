@@ -4,20 +4,19 @@
     import { ref } from 'vue';
     import { open } from '@tauri-apps/plugin-dialog';
 
-
     const userStore = useUserStore()
     const visibleSettings = ref(JSON.parse(JSON.stringify(userStore.$state)))
 
-
-
-    const reset = () =>
+    const reset = async () =>
     {
+        await userStore.loadSettings()
         visibleSettings.value = JSON.parse(JSON.stringify(userStore.$state))
     }
 
-    const save = () =>
+    const save = async () =>
     {
         userStore.$patch(JSON.parse(JSON.stringify(visibleSettings.value)))
+        await userStore.saveSettings()
     }
 
     const chooseRepositoryPath = async () =>
@@ -82,12 +81,6 @@
             <onyks-textfield size="m" v-model="visibleSettings.repository.path" placeholder="e.g C:/User/repository" disabled></onyks-textfield>
         </onyks-container>
 
-
-
-
-
-
-        
         <onyks-container gap="m" type="group" align="center" justify="end" padding="">
             <onyks-button background="yellow" @click="chooseRepositoryPath">Select</onyks-button>
         </onyks-container>

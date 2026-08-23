@@ -38,7 +38,11 @@
             "core:window:allow-start-resize-dragging",
             "core:webview:allow-webview-close",
             "core:webview:allow-webview-hide",
-            "core:window:allow-destroy"
+            "core:window:allow-destroy",
+            {
+              "identifier": "http:default",
+              "allow": [{ "url": "http://*:*" }]
+            }
           ]
         }
       ]
