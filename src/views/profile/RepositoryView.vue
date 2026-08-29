@@ -111,12 +111,63 @@
 
     const repositoryCleanup = async () =>
     {
+        dialogs.value.progress.message = 'Cleaning repository...'
+        dialogs.value.progress.state = 50
+        dialogs.value.progress.toggleOpen(true)
+        await sleep(1000)
+
+        try
+        {
+            await invoke('svn_cleanup', 
+            {
+                svnFolderPath: userStore.repository.path
+            })
+            dialogs.value.progress.message = 'Finishing...'
+            dialogs.value.progress.state = 100
+            await sleep(1000)
+            dialogs.value.progress.toggleOpen(false)
+            return true
+        }
+        catch(e)
+        {
+            console.log(e)
+            dialogs.value.progress.message = 'Error...'
+            dialogs.value.progress.state = 100
+            await sleep(1000)
+            dialogs.value.progress.toggleOpen(false)
+            return false
+        }
 
     }
 
     const repositoryReverse = async () =>
     {
-        
+        dialogs.value.progress.message = 'Reverting changes...'
+        dialogs.value.progress.state = 50
+        dialogs.value.progress.toggleOpen(true)
+        await sleep(1000)
+
+        try
+        {
+            await invoke('svn_revert', 
+            {
+                svnFolderPath: userStore.repository.path
+            })
+            dialogs.value.progress.message = 'Finishing...'
+            dialogs.value.progress.state = 100
+            await sleep(1000)
+            dialogs.value.progress.toggleOpen(false)
+            return true
+        }
+        catch(e)
+        {
+            console.log(e)
+            dialogs.value.progress.message = 'Error...'
+            dialogs.value.progress.state = 100
+            await sleep(1000)
+            dialogs.value.progress.toggleOpen(false)
+            return false
+        }
     }
 
     const handleClickBtn = async (source) =>
@@ -154,10 +205,12 @@
                     }
                     break;
                 case 'revert':
-                    console.log(await invoke('svn_revert', {svnFolderPath: userStore.repository.path}))
+                    await repositoryIsExist()
+                    await repositoryReverse()
                     break;
                 case 'reset':
-                    console.log(await invoke('svn_cleanup', {svnFolderPath: userStore.repository.path}))
+                    await repositoryIsExist()
+                    await repositoryCleanup()
                     break
             }
         }

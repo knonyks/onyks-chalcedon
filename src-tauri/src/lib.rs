@@ -1,8 +1,9 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
+#[cfg(target_os = "windows")]
 use std::os::windows::process::CommandExt;
+
 use std::path::Path;
 use std::process::Command;
-
 use tauri::Manager;
 
 #[tauri::command]
@@ -165,7 +166,7 @@ fn svn_update(svn_folder_path: &str, login: &str, password: &str) -> Result<Stri
             password,
             "--trust-server-cert",
             "--non-interactive",
-            "--no-auth-cache",
+            "--no-auth-cache"
         ])
         .output()
         .map_err(|e| format!("Błąd wykonania komendy: {}", e))?;
@@ -176,17 +177,48 @@ fn svn_update(svn_folder_path: &str, login: &str, password: &str) -> Result<Stri
     }
 }
 
-// #[tauri::command(async)]
-// fn svn_revert(svn_folder_path: &str) -> Result<String, String> {
-//     #[cfg(target_os = "windows")]
-//     command.creation_flags(0x08000000);
-// }
+#[tauri::command(async)]
+fn svn_revert(svn_folder_path: &str) -> Result<String, String> {
+    let mut command = Command::new("svn");
+    #[cfg(target_os = "windows")]
+    command.creation_flags(0x08000000);
 
-// #[tauri::command(async)]
-// fn svn_cleanup(svn_folder_path: &str) -> Result<String, String> {
-//     #[cfg(target_os = "windows")]
-//     command.creation_flags(0x08000000);
-// }
+    let output = command
+        .current_dir(svn_folder_path)
+        .args([
+            "revert", 
+            "-R", 
+            "."
+        ])
+        .output()
+        .map_err(|e| format!("Błąd wykonania komendy: {}", e))?;
+    if output.status.success() {
+        Ok(String::from_utf8_lossy(&output.stdout).to_string())
+    } else {
+        Err(String::from_utf8_lossy(&output.stderr).to_string())
+    }
+}
+
+#[tauri::command(async)]
+fn svn_cleanup(svn_folder_path: &str) -> Result<String, String> {
+    let mut command = Command::new("svn");
+    #[cfg(target_os = "windows")]
+    command.creation_flags(0x08000000);
+
+    let output = command
+        .current_dir(svn_folder_path)
+        .args([
+            "cleanup",
+            "--remove-unversioned",
+            ])
+        .output()
+        .map_err(|e| format!("Błąd wykonania komendy: {}", e))?;
+    if output.status.success() {
+        Ok(String::from_utf8_lossy(&output.stdout).to_string())
+    } else {
+        Err(String::from_utf8_lossy(&output.stderr).to_string())
+    }
+}
 
 
 #[tauri::command(async)]
@@ -255,7 +287,9 @@ pub fn run() {
             svn_add_all,
             svn_commit,
             svn_update,
-            svn_delete
+            svn_delete,
+            svn_revert,
+            svn_cleanup
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
