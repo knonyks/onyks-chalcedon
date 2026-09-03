@@ -261,6 +261,49 @@ fn svn_delete(svn_folder_path: &str) -> Result<String, String> {
     Ok(deleted_files.join("\n"))
 }
 
+#[tauri::command(async)]
+fn DbLib_ConnectionString(user: &str, source: &str) -> String {
+    format!(
+        "ConnectionString=Provider=MSDASQL.1;Persist Security Info=False;User ID={};Data Source={}",
+        source, user
+    )
+}
+
+#[tauri::command(async)]
+fn DbLib_table(id: u32, name: &str, enabled: bool) -> String {
+    
+    let enabled_str = if enabled { "True" } else { "False" };
+    format!(
+        "[Table{id}]\n\
+        SchemaName=\n\
+        TableName={name}\n\
+        Enabled={enabled_str}\n\
+        UserWhere=0\n\
+        UserWhereText=",
+        id, name, enabled_str
+    )
+}
+
+#[tauri::command(async)]
+fn DbLib_FieldMap(index: u32, tableName: &str, fieldName: &str, 
+    fieldType: u32, parameterName: &str, visibleOnAdd: bool, 
+    addMode: u32, removeMode: u32, updateMode: u32) -> String {
+    
+    let visible_str = if visibleOnAdd { "True" } else { "False" };
+    format!(
+        "[FieldMap{index}]\n\
+        Options=FieldName={tableName}.{fieldName}|\
+        TableNameOnly={tableName}|\
+        FieldNameOnly={fieldName}|\
+        FieldType={fieldType}|\
+        ParameterName={parameterName}|\
+        VisibleOnAdd={visible_str}|\
+        AddMode={addMode}|\
+        RemoveMode={removeMode}|\
+        UpdateMode={updateMode}",
+    )
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
