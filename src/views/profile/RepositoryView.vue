@@ -252,7 +252,7 @@
 
 <template>
     <ProfilePage title="Repository">
-        <onyks-path :content="currentPath" ref="path"></onyks-path>
+        <!-- <onyks-path :content="currentPath" ref="path"></onyks-path>
         <onyks-container type="group" gap="m" padding="">
             <onyks-container type="stack" gap="m" class="files" padding="">
                 <onyks-file-explorer ref="explorer"></onyks-file-explorer>
@@ -266,7 +266,8 @@
             </onyks-container>
         </onyks-container>
         <ErrorDialog :ref="(el) => {if(dialogs && el) dialogs.error = el}"></ErrorDialog>
-        <ProgressDialog :ref="(el) => {if(dialogs && el) dialogs.progress = el}"></ProgressDialog>
+        <ProgressDialog :ref="(el) => {if(dialogs && el) dialogs.progress = el}"></ProgressDialog> -->
+        <div style="height: 2000px; width: 100%; background-color: red;"></div>
     </ProfilePage>
 </template>
 

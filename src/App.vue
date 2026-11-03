@@ -1,17 +1,19 @@
 <script setup>
     import { onMounted } from 'vue';
     import { useUserStore } from './stores/user';
-    
 
     const store = useUserStore()
     store.init()
 
     onMounted(() =>
     {
-        // document.addEventListener('contextmenu', (e) => 
-        // {
-        //     e.preventDefault();
-        // });
+        if(import.meta.env.PROD)
+        {
+            document.addEventListener('contextmenu', (e) => 
+            {
+                e.preventDefault();
+            });
+        }
     })
 </script>
 
@@ -32,5 +34,7 @@
     {
         margin: 0;
         height: 100vh;
+        width: 100vh;
+        overflow: hidden;
     }
 </style>

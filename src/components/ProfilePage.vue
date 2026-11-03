@@ -15,7 +15,6 @@
     onyks-container
     {
         width: 100%;
-        max-width: 1024px;
         height: 100%;
         margin-left: auto;
         margin-right: auto;
