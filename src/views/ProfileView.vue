@@ -1,12 +1,18 @@
 <script setup>
-    import { reactive } from 'vue';
+    import { onMounted, reactive } from 'vue';
     import RepositoryPanel from '../components/panels/RepositoryPanel.vue';
     import DatabasePanel from '../components/panels/DatabasePanel.vue';
     import { useRouter } from 'vue-router';
     import { usePanels } from '../components/composables/usePanels.js';
-    const panels = reactive(usePanels(2))
+    import { useProfileStore } from '../stores/profile.js';
+    import ProfilePanel from '../components/panels/ProfilePanel.vue';
+
+    const panels = reactive(usePanels(3))
     const router = useRouter()
-    // import { ref } from 'vue';
+    const profile_store = useProfileStore()
+
+
+    import { ref } from 'vue';
     // import AboutProgramDialog from '../components/AboutProgramDialog.vue';
     // import { WebviewWindow } from '@tauri-apps/api/webviewWindow';
     // import { useUserStore } from '../stores/user.js';
@@ -79,22 +85,31 @@
     <onyks-container class="container" type="group">
         <onyks-container padding="m" class="menu-container">
             <onyks-strip-menu type="v" class="menu">
-                <!-- <onyks-strip-menu-option size="m" icon="F10D"></onyks-strip-menu-option> -->
-                 <onyks-strip-menu-option @click="panels.toggle(0)" size="m" icon="F8C4"></onyks-strip-menu-option>
-                <onyks-strip-menu-option @click="panels.toggle(1)" size="m" icon="F10D"></onyks-strip-menu-option>
+                <onyks-avatar :src="profile_store.profile.avatar" @click="panels.toggle(0)"></onyks-avatar>
+                <!-- <onyks-strip-menu-option size="m" icon="F295"></onyks-strip-menu-option>
+                <onyks-strip-menu-option size="m" icon="F2CD"></onyks-strip-menu-option>
+                <onyks-strip-menu-option size="m" icon="F224"></onyks-strip-menu-option>
+                <onyks-strip-menu-option size="m" icon="F2D6"></onyks-strip-menu-option>
+                <onyks-strip-menu-option size="m" icon="F56B"></onyks-strip-menu-option>
+                <onyks-strip-menu-option size="m" icon="F44C"></onyks-strip-menu-option>
+                <onyks-strip-menu-option size="m" icon="F10D"></onyks-strip-menu-option> -->
+
+                <onyks-strip-menu-option @click="panels.toggle(1)" size="m" icon="F8C4"></onyks-strip-menu-option>
+                <onyks-strip-menu-option @click="panels.toggle(2)" size="m" icon="F10D"></onyks-strip-menu-option>
                 <onyks-strip-menu-option @click="router.push('/profile/settings')" size="m" icon="F3E3"></onyks-strip-menu-option>
             </onyks-strip-menu>
         </onyks-container>
         <onyks-container class="content">
-            <DatabasePanel v-model:open="panels.items[0]"></DatabasePanel>
-            <RepositoryPanel v-model:open="panels.items[1]"></RepositoryPanel>
+            <ProfilePanel v-model:open="panels.items[0]"></ProfilePanel>
+            <DatabasePanel v-model:open="panels.items[1]"></DatabasePanel>
+            <RepositoryPanel v-model:open="panels.items[2]"></RepositoryPanel>
             
             <onyks-container class="subcontent">
-                <Transition name="fade" mode="out-in" appear>
-                    <router-view v-slot="{ Component, route }">
+                <router-view v-slot="{ Component, route }">
+                    <Transition name="fade" mode="out-in" appear>
                         <component :is="Component" :key="route.fullPath" />
-                    </router-view>
-                </Transition>
+                    </Transition>
+                </router-view>
             </onyks-container>
         </onyks-container>
     </onyks-container>
