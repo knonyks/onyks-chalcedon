@@ -1,7 +1,6 @@
 <script setup>
     import get_random_emoji from '../utils/emoji';
     import { open } from '@tauri-apps/plugin-dialog';
-    import ImportExportDialog from './ImportExportDialog.vue';
     import { reactive, ref } from 'vue';
 
     const model = defineModel()
@@ -24,11 +23,11 @@
 
 <template>
     <onyks-container gap="m" type="stack">
-        <onyks-container type="group" gap="m">
+        <!-- <onyks-container type="group" gap="m">
             <onyks-button background="yellow" @click="import_export_dialog.import = true">Import</onyks-button>
             <onyks-button background="purple" @click="import_export_dialog.export = true">Export</onyks-button>
             <onyks-button background="purple">Test Connection</onyks-button>
-        </onyks-container>
+        </onyks-container> -->
         <onyks-header level="5">Avatar & Name</onyks-header>
         <onyks-container type="grid" cols="2" class="settings" gap="m">
             <onyks-text>Avatar</onyks-text>
@@ -66,14 +65,14 @@
             <onyks-textfield v-model="model.repository.interval" type="number" class="textfield"></onyks-textfield>
         </onyks-container>
 
-        <!-- <onyks-header level="5">Database</onyks-header>
+        <onyks-header level="5">Database</onyks-header>
 
         <onyks-container type="grid" cols="2" class="settings" gap="m">
             <onyks-text>Autoupdate</onyks-text>
             <onyks-checkbox :checked="model.database.autoupdate" @click="model.database.autoupdate != !model.repository.autoupdate" size="m"></onyks-checkbox>
             <onyks-text>Autoupdate Interval (in minutes)</onyks-text>
             <onyks-textfield v-model="model.database.interval" type="number" class="textfield"></onyks-textfield>
-        </onyks-container> -->
+        </onyks-container>
 
         <onyks-header level="5">Other Settings</onyks-header>
         <onyks-alert type="warning">It's recommended to use an empty folder. The program may delete files that you don't want to remove.</onyks-alert>
@@ -84,8 +83,6 @@
         <onyks-container align="end">
             <onyks-button background="blue" @click="handle_change_path">Select</onyks-button>
         </onyks-container>
-        <ImportExportDialog mode="export" v-model="model" v-model:open="import_export_dialog.export"></ImportExportDialog>
-        <ImportExportDialog mode="import" v-model="model" v-model:open="import_export_dialog.import"></ImportExportDialog>
     </onyks-container>
 </template>
 

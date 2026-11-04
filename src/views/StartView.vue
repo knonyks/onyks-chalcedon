@@ -38,6 +38,7 @@
     const handle_open = async () =>
     {
         profiles_store.profile = await profiles_store.load_profile(profile_selector.current_index)
+        profiles_store.index = profile_selector.current_index
         router.push('/profile/settings')
     }
 </script>

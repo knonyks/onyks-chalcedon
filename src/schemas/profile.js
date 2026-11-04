@@ -12,17 +12,17 @@ const profile = () =>
         {
             address: '',
             autoupdate: false,
-            interval: 60
+            interval: 60,
         },
         web_manager:
         {
             address: ''
         },
-        // database:
-        // {
-        //     autoupdate: false,
-        //     interval: 60
-        // }
+        database:
+        {
+            autoupdate: false,
+            interval: 60
+        }
     }
 }
 

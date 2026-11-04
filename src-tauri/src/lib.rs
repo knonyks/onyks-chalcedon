@@ -6,6 +6,8 @@ use std::path::Path;
 use std::process::Command;
 use tauri::Manager;
 
+pub mod dblib;
+
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
@@ -322,16 +324,7 @@ pub fn run() {
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
-            greet,
-            is_svn_repository,
-            svn_status,
-            svn_checkout,
-            svn_add_all,
-            svn_commit,
-            svn_update,
-            svn_delete,
-            svn_revert,
-            svn_cleanup
+            dblib::dblib_generate_dsn
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
