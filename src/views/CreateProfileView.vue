@@ -16,7 +16,7 @@
         {
             let index = await profile_store.add_profile(profile)
             profile_store.profile = await profile_store.load_profile(index)
-            router.push('/profile/settings')
+            router.push('/profile/manager/dashboard')
         }
         else
         {

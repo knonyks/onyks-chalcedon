@@ -6,9 +6,12 @@
     import router from '../router/index.js';
     import { useProfileStore } from '../stores/profile.js';
     import { ref, reactive, onMounted } from 'vue';
+    import { useAuthStore } from '@bloodstone/stores/auth';
+    import { set_new_api } from '../utils/api.js';
 
-    const profiles_store = useProfileStore()
+    const profile_store = useProfileStore()
     const profile_selector = reactive(useProfileSelector())
+    const auth_store = useAuthStore()
 
     const dialogs = reactive(
     {
@@ -18,13 +21,13 @@
             open: false,
             handle_open: async () =>
             {
-                dialogs.delete.profile = await profiles_store.load_profile(profile_selector.current_index); 
+                dialogs.delete.profile = await profile_store.load_profile(profile_selector.current_index); 
                 dialogs.delete.open = true
             },
             handle_confirm: async () =>
             {
-                await profiles_store.remove_profile(profile_selector.current_index)
-                profile_selector.items = await profiles_store.load_profiles()
+                await profile_store.remove_profile(profile_selector.current_index)
+                profile_selector.items = await profile_store.load_profiles()
                 dialogs.delete.open = false
             }
         }
@@ -32,14 +35,24 @@
    
     onMounted(async () => 
     {
-        profile_selector.items = await profiles_store.load_profiles()
+        profile_selector.items = await profile_store.load_profiles()
     })
 
     const handle_open = async () =>
     {
-        profiles_store.profile = await profiles_store.load_profile(profile_selector.current_index)
-        profiles_store.index = profile_selector.current_index
-        router.push('/profile/settings')
+        profile_store.profile = await profile_store.load_profile(profile_selector.current_index)
+        profile_store.index = profile_selector.current_index
+        try
+        {
+            set_new_api(profile_store.profile.web_manager.address)
+            auth_store.login(profile_store.profile.username, profile_store.profile.password)
+            router.push('/profile/manager/dashboard')
+        }
+        catch (error)
+        {
+            console.error('Login failed:', error)
+            return
+        }
     }
 </script>
 
@@ -70,13 +83,11 @@
     {
         width: 100vw;
         height: 100vh;
-        /* background-color: red; */
         box-sizing: border-box;
     }
 
     .profiles-content
     {
-        /* background-color: blue; */
         max-width: 600px;
         max-height: 500px;
         width: 100%;
@@ -106,6 +117,5 @@
         height: 100%;
         width: 100%;
         min-height: 0;
-        /* background-color: yellow; */
     }
 </style>

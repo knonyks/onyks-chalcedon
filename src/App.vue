@@ -1,5 +1,6 @@
 <script setup>
     import { onMounted } from 'vue';
+    
     onMounted(() =>
     {
         if(import.meta.env.PROD)
@@ -15,7 +16,7 @@
 <template>
     <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
-            <component :is="Component" :key="$route.fullPath" />
+            <component :is="Component" />
         </transition>
     </router-view>
     <onyks-container padding="m" class="toast-container">
