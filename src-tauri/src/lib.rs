@@ -24,9 +24,13 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             dblib::dblib_generate_dsn,
+            dblib::dblib_save,
             dblib::dblib_connectionstring,
+            dblib::dblib_init,
             dblib::dblib_table,
+            dblib::dblib_generate_tables,
             dblib::dblib_fieldmap,
+            dblib::dblib_generate_fields,
             svn::is_svn_repository,
             svn::svn_status,
             svn::svn_checkout,
