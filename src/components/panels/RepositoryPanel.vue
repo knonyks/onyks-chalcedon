@@ -6,11 +6,11 @@
 <template>
     <LeftPanel title="Repository">
         <onyks-container type="stack" gap="m" class="btns-container">
-            <onyks-button class="btn" background="green" @click="">Push</onyks-button>
-            <onyks-button class="btn" background="blue" @click="">Pull</onyks-button>
-            <onyks-button class="btn" background="red" @click="">Reset</onyks-button>
-            <onyks-button class="btn" background="yellow" @click="">Revert</onyks-button>
-            <onyks-button class="btn" background="gray" @click="">Explorer</onyks-button>
+            <onyks-button animated class="btn" background="green" @click="">Push</onyks-button>
+            <onyks-button animated class="btn" background="blue" @click="">Pull</onyks-button>
+            <onyks-button animated class="btn" background="red" @click="">Reset</onyks-button>
+            <onyks-button animated class="btn" background="yellow" @click="">Revert</onyks-button>
+            <onyks-button animated class="btn" background="gray" @click="">Explorer</onyks-button>
         </onyks-container>
     </LeftPanel>
 </template>

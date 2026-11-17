@@ -72,23 +72,30 @@
 <template>
     <onyks-container class="container" type="group">
         <onyks-container padding="m" class="menu-container">
-            <onyks-strip-menu type="v" class="menu">
-                <onyks-avatar :src="profile_store.profile.avatar" @click="panels.toggle(0)"></onyks-avatar>
+            <onyks-panel class="menu" padding="s">
+                <onyks-container gap="s" align="center">
+                    <onyks-avatar class="avatar" size="m":src="profile_store.profile.avatar" @click="panels.toggle(0)"></onyks-avatar>
+                    <onyks-tile size="m" icon="F2CD" @click="router.push('/profile/manager/dashboard')"></onyks-tile>
+                    <onyks-tile size="m" icon="F224" @click="router.push('/profile/manager/management')"></onyks-tile>
+                    <onyks-tile size="m" icon="F2D6" @click="router.push('/profile/manager/repository')"></onyks-tile>
+                    <onyks-tile size="m" icon="F788" @click="router.push('/profile/manager/settings')"></onyks-tile>
+                    <onyks-tile size="m" icon="F678" @click="router.push('/profile/manager/admin')"></onyks-tile>
+                    <hr style="width: 100%;">
+                    <!-- <onyks-tile @click="panels.toggle(1)" size="m" icon="F8C4"></onyks-tile> -->
+                    <onyks-tile @click="panels.toggle(2)" size="m" icon="F10D"></onyks-tile>
+                    <onyks-tile @click="router.push('/profile/settings')" size="m" icon="F3E3"></onyks-tile>
+                </onyks-container>
+                
 
-                <onyks-strip-menu-option size="m" icon="F2CD" @click="router.push('/profile/manager/dashboard')"></onyks-strip-menu-option>
-                <onyks-strip-menu-option size="m" icon="F224" @click="router.push('/profile/manager/management')"></onyks-strip-menu-option>
-                <onyks-strip-menu-option size="m" icon="F2D6" @click="router.push('/profile/manager/repository')"></onyks-strip-menu-option>
-                <onyks-strip-menu-option size="m" icon="F788" @click="router.push('/profile/manager/settings')"></onyks-strip-menu-option>
-                <onyks-strip-menu-option size="m" icon="F678" @click="router.push('/profile/manager/admin')"></onyks-strip-menu-option>
 
-                <!-- <onyks-strip-menu-option size="m" icon="F56B"></onyks-strip-menu-option>
-                <onyks-strip-menu-option size="m" icon="F44C"></onyks-strip-menu-option>
-                <onyks-strip-menu-option size="m" icon="F10D"></onyks-strip-menu-option> -->
+                <!-- <onyks-tile size="m" icon="F56B"></onyks-tile>
+                <onyks-tile size="m" icon="F44C"></onyks-tile>
+                <onyks-tile size="m" icon="F10D"></onyks-tile> -->
 
-                <onyks-strip-menu-option @click="panels.toggle(1)" size="m" icon="F8C4"></onyks-strip-menu-option>
-                <onyks-strip-menu-option @click="panels.toggle(2)" size="m" icon="F10D"></onyks-strip-menu-option>
-                <onyks-strip-menu-option @click="router.push('/profile/settings')" size="m" icon="F3E3"></onyks-strip-menu-option>
-            </onyks-strip-menu>
+                <!-- <onyks-tile @click="panels.toggle(1)" size="m" icon="F8C4"></onyks-tile>
+                <onyks-tile @click="panels.toggle(2)" size="m" icon="F10D"></onyks-tile>
+                <onyks-tile @click="router.push('/profile/settings')" size="m" icon="F3E3"></onyks-tile> -->
+            </onyks-panel>
         </onyks-container>
         <onyks-container class="content">
             <ProfilePanel v-model:open="panels.items[0]"></ProfilePanel>
@@ -121,6 +128,25 @@
     {
         height: 100%;
         box-sizing: border-box;
+    }
+
+    .avatar
+    {
+        width: auto; 
+        aspect-ratio: 1/1; 
+        height: auto;
+    }
+
+    .menu 
+    {
+        overflow-y: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .menu::-webkit-scrollbar 
+    {
+        display: none;
     }
 
     .menu

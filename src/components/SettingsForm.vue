@@ -28,18 +28,18 @@
             <onyks-button background="purple" @click="import_export_dialog.export = true">Export</onyks-button>
             <onyks-button background="purple">Test Connection</onyks-button>
         </onyks-container> -->
-        <onyks-header level="5">Avatar & Name</onyks-header>
+        <onyks-header size="l">Avatar & Name</onyks-header>
         <onyks-container type="grid" cols="2" class="settings" gap="m">
             <onyks-text>Avatar</onyks-text>
             <onyks-container type="group" gap="m" align="center">
-                <onyks-avatar :src="model.avatar"></onyks-avatar>
+                <onyks-avatar style="width: auto; height: auto;" size="m" :src="model.avatar"></onyks-avatar>
                 <onyks-button @click="model.avatar = get_random_emoji()">Random</onyks-button>
             </onyks-container>
             
             <onyks-text>Name</onyks-text>
             <onyks-textfield v-model="model.name" class="textfield"></onyks-textfield>
         </onyks-container>
-        <onyks-header level="5">Access Data</onyks-header>
+        <onyks-header size="l">Access Data</onyks-header>
         <onyks-container type="grid" cols="2" class="settings" gap="m">
             <onyks-text>Login</onyks-text>
             <onyks-textfield class="textfield" v-model="model.username"></onyks-textfield>
@@ -47,14 +47,14 @@
             <onyks-textfield type="password" class="textfield" v-model="model.password"></onyks-textfield>
         </onyks-container>
 
-        <onyks-header level="5">Web Manager</onyks-header>
+        <onyks-header size="l">Web Manager</onyks-header>
 
         <onyks-container type="grid" cols="2" class="settings" gap="m">
             <onyks-text>Address</onyks-text>
             <onyks-textfield class="textfield" v-model="model.web_manager.address"></onyks-textfield>
         </onyks-container>
 
-        <onyks-header level="5">Repository</onyks-header>
+        <onyks-header size="l">Repository</onyks-header>
 
         <onyks-container type="grid" cols="2" class="settings" gap="m">
             <onyks-text>Address</onyks-text>
@@ -65,16 +65,16 @@
             <onyks-textfield v-model="model.repository.interval" type="number" class="textfield"></onyks-textfield>
         </onyks-container>
 
-        <onyks-header level="5">Database</onyks-header>
+        <!-- <onyks-header size="l">Database</onyks-header>
 
         <onyks-container type="grid" cols="2" class="settings" gap="m">
             <onyks-text>Autoupdate</onyks-text>
             <onyks-checkbox :checked="model.database.autoupdate" @click="model.database.autoupdate != !model.repository.autoupdate" size="m"></onyks-checkbox>
             <onyks-text>Autoupdate Interval (in minutes)</onyks-text>
             <onyks-textfield v-model="model.database.interval" type="number" class="textfield"></onyks-textfield>
-        </onyks-container>
+        </onyks-container> -->
 
-        <onyks-header level="5">Other Settings</onyks-header>
+        <onyks-header size="l">Other Settings</onyks-header>
         <onyks-alert type="warning">It's recommended to use an empty folder. The program may delete files that you don't want to remove.</onyks-alert>
         <onyks-container type="grid" cols="2" class="settings" gap="m">
             <onyks-text>Destination Path</onyks-text>

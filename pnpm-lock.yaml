@@ -37,7 +37,7 @@ importers:
         version: 3.7.2
       onyks-web-ui:
         specifier: github:knonyks/onyks-web-ui
-        version: https://codeload.github.com/knonyks/onyks-web-ui/tar.gz/4188d1d9fdaa4377872e7863302c4ce65992e0b4(vite@6.4.3(yaml@2.9.0))(vue@3.5.41)
+        version: https://codeload.github.com/knonyks/onyks-web-ui/tar.gz/2ff37f1c65de139a5adcc36cf1aab1c1f2efeed9(vite@6.4.3(yaml@2.9.0))(vue@3.5.41)
       pinia:
         specifier: ^4.0.3
         version: 4.0.3(@vue/devtools-api@8.2.1)(vue@3.5.41)
@@ -820,9 +820,9 @@ packages:
   nostics@1.2.0:
     resolution: {integrity: sha512-FGqEfhQjrvo1lL8KFifdTQiNwwQHJxC1jtYE1Rc54qF/jxONUNL+kC9gS1krX8Q65PgrQ5fCqH/I4NhWBvdSqg==}
 
-  onyks-web-ui@https://codeload.github.com/knonyks/onyks-web-ui/tar.gz/4188d1d9fdaa4377872e7863302c4ce65992e0b4:
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/knonyks/onyks-web-ui/tar.gz/4188d1d9fdaa4377872e7863302c4ce65992e0b4}
-    version: 0.3.0
+  onyks-web-ui@https://codeload.github.com/knonyks/onyks-web-ui/tar.gz/2ff37f1c65de139a5adcc36cf1aab1c1f2efeed9:
+    resolution: {gitHosted: true, integrity: sha512-OLLCmG3oOeMHuTSCgOGLkwCMazR6a0jTIC+ZL/26y56EMsGyDlyZk3Hqk4A/cv2QDHrvOG1yeU1RAzCS73qiDQ==, tarball: https://codeload.github.com/knonyks/onyks-web-ui/tar.gz/2ff37f1c65de139a5adcc36cf1aab1c1f2efeed9}
+    version: 0.1.0
 
   pathe@2.0.3:
     resolution: {integrity: sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w==}
@@ -1632,7 +1632,7 @@ snapshots:
 
   nostics@1.2.0: {}
 
-  onyks-web-ui@https://codeload.github.com/knonyks/onyks-web-ui/tar.gz/4188d1d9fdaa4377872e7863302c4ce65992e0b4(vite@6.4.3(yaml@2.9.0))(vue@3.5.41):
+  onyks-web-ui@https://codeload.github.com/knonyks/onyks-web-ui/tar.gz/2ff37f1c65de139a5adcc36cf1aab1c1f2efeed9(vite@6.4.3(yaml@2.9.0))(vue@3.5.41):
     dependencies:
       '@fontsource/inter': 5.3.0
       '@lit/context': 1.1.6

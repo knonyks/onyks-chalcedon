@@ -65,10 +65,10 @@
                     <ProfileSelector v-model="profile_selector"></ProfileSelector>
                 </onyks-container>
                 <onyks-container gap="m">
-                    <onyks-button @click="handle_open" class="btn" background="green" :disabled="profile_selector.current_index == -1">Open</onyks-button>
-                    <onyks-button class="btn" background="blue" @click="router.push('/create-profile')">New</onyks-button>
+                    <onyks-button animated @click="handle_open" class="btn" background="green" :disabled="profile_selector.current_index == -1">Open</onyks-button>
+                    <onyks-button animated class="btn" background="blue" @click="router.push('/create-profile')">New</onyks-button>
                     <!-- <onyks-button class="btn" background="yellow" :disabled="profile_selector.current_index == -1">Edit</onyks-button> -->
-                    <onyks-button class="btn" @click="dialogs.delete.handle_open" background="red" :disabled="profile_selector.current_index == -1">Delete</onyks-button>
+                    <onyks-button animated class="btn" @click="dialogs.delete.handle_open" background="red" :disabled="profile_selector.current_index == -1">Delete</onyks-button>
                     <!-- <onyks-button class="btn" background="purple">Settings</onyks-button> -->
                     <!-- <onyks-button class="btn" background="gray">About</onyks-button> -->
                 </onyks-container>

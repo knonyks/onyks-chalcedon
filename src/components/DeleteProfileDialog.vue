@@ -6,9 +6,9 @@
 
 <template>
     <onyks-dialog class="dialog" :open="open" title="Delete Profile" corner-close title-size="l" bottom-buttons>
-        <onyks-container gap="s" type="group">
+        <onyks-container gap="s" type="group" align="center">
             <onyks-text>You are removing profile:</onyks-text>
-            <onyks-tag>{{ profile.name }}</onyks-tag>
+            <onyks-tag background="indigo">{{ profile.name }}</onyks-tag>
         </onyks-container>
         <onyks-button slot="footer" @click="emit('confirm')">Confirm</onyks-button>
     </onyks-dialog>

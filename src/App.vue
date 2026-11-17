@@ -38,6 +38,17 @@
         min-width: 120px;
     }
 
+    onyk-avatar
+    {
+        width: auto;
+        height: auto;
+    }
+
+    onyks-checkbox
+    {
+        width: fit-content;
+    }
+
     .fade-enter-active, .fade-leave-active
     {
         transition: opacity 0.25s ease;

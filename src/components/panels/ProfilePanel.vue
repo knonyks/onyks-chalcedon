@@ -7,13 +7,14 @@
 
 <template>
     <LeftPanel title="" class="panel">
+        <onyks-text>You are logged in as:</onyks-text>
         <onyks-tag size="m" background="blue" icon="F4D7">{{ profile_store.profile.name }}</onyks-tag>
-        <onyks-button size="m" @click="router.push('/start')">Exit</onyks-button>
+        <onyks-button style="width: 100%;" size="m" @click="router.push('/start')">Exit</onyks-button>
     </LeftPanel>
 </template>
 
 <style scoped>
-    .btn
+    .btn    
     {
         width: 120px;
     }
