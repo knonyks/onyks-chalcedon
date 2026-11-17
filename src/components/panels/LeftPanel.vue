@@ -45,6 +45,6 @@
         width: fit-content;
         height: 100%;
         box-sizing: border-box;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
 </style>
