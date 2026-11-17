@@ -7,7 +7,7 @@
     <onyks-container padding="m" class="panel" :class="{ open }">
         <onyks-panel class="subpanel" padding="s">
             <onyks-container class="content" gap="m" padding="s">
-                <onyks-header v-if="props.title != ''" size="l">{{ props.title }}</onyks-header>
+                <onyks-header v-if="props.title != ''" size="xl">{{ props.title }}</onyks-header>
                 <slot></slot>
             </onyks-container>
         </onyks-panel>
@@ -45,5 +45,6 @@
         width: fit-content;
         height: 100%;
         box-sizing: border-box;
+        overflow-y: scroll;
     }
 </style>

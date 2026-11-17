@@ -2,14 +2,28 @@
     import get_random_emoji from '../utils/emoji';
     import { open } from '@tauri-apps/plugin-dialog';
     import { reactive, ref } from 'vue';
+    import ImportExportDialog from './composables/ImportExportDialog.vue';
+    import { export_profile_to_base64 } from '../utils/profile.js';
+
 
     const model = defineModel()
     model.value.web_manager ??= { address: '' }
+    model.value.repository ??= { address: '', autoupdate: false, interval: 60 }
+
     const import_export_dialog = reactive(
     {
         export: false,
-        import: false
+        import: false,
+        export_current_text: '',
+        handle_export: () =>
+        {
+            console.log('xxx')
+            console.log(model.value)
+            import_export_dialog.export_current_text = export_profile_to_base64(model.value)
+            import_export_dialog.export = true
+        }
     })
+
     const handle_change_path = async () =>
     {
         const file = await open(
@@ -22,12 +36,12 @@
 </script>
 
 <template>
-    <onyks-container gap="m" type="stack">
-        <!-- <onyks-container type="group" gap="m">
-            <onyks-button background="yellow" @click="import_export_dialog.import = true">Import</onyks-button>
-            <onyks-button background="purple" @click="import_export_dialog.export = true">Export</onyks-button>
-            <onyks-button background="purple">Test Connection</onyks-button>
-        </onyks-container> -->
+    <onyks-container gap="m" type="stack" align="start">
+        <onyks-container type="group" gap="m">
+            <onyks-button background="lime" @click="import_export_dialog.export = true">Import</onyks-button>
+            <onyks-button background="indigo" @click="import_export_dialog.handle_export">Export</onyks-button>
+            <onyks-button background="teal">Test Connection</onyks-button>
+        </onyks-container>
         <onyks-header size="l">Avatar & Name</onyks-header>
         <onyks-container type="grid" cols="2" class="settings" gap="m">
             <onyks-text>Avatar</onyks-text>
@@ -65,14 +79,14 @@
             <onyks-textfield v-model="model.repository.interval" type="number" class="textfield"></onyks-textfield>
         </onyks-container>
 
-        <!-- <onyks-header size="l">Database</onyks-header>
+        <onyks-header size="l">Database</onyks-header>
 
         <onyks-container type="grid" cols="2" class="settings" gap="m">
             <onyks-text>Autoupdate</onyks-text>
             <onyks-checkbox :checked="model.database.autoupdate" @click="model.database.autoupdate != !model.repository.autoupdate" size="m"></onyks-checkbox>
             <onyks-text>Autoupdate Interval (in minutes)</onyks-text>
             <onyks-textfield v-model="model.database.interval" type="number" class="textfield"></onyks-textfield>
-        </onyks-container> -->
+        </onyks-container>
 
         <onyks-header size="l">Other Settings</onyks-header>
         <onyks-alert type="warning">It's recommended to use an empty folder. The program may delete files that you don't want to remove.</onyks-alert>
@@ -83,6 +97,9 @@
         <onyks-container align="end">
             <onyks-button background="blue" @click="handle_change_path">Select</onyks-button>
         </onyks-container>
+
+        <ImportExportDialog v-model="import_export_dialog.export_current_text" v-model:open="import_export_dialog.export"></ImportExportDialog>
+        <!-- <ImportExportDialog type="import" v-model:open="import_export_dialog.import"></ImportExportDialog> -->
     </onyks-container>
 </template>
 

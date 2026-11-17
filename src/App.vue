@@ -61,14 +61,16 @@
 
     .toast-container
     {
-        position: fixed; 
-        bottom: 0; 
+        position: fixed;
+        bottom: 0;
         right: 0;
         box-sizing: border-box;
+        pointer-events: none;
     }
 
     .toast-container-content
     {
+        pointer-events: none;
         flex-direction: column-reverse;
     }
 </style>

@@ -75,26 +75,16 @@
             <onyks-panel class="menu" padding="s">
                 <onyks-container gap="s" align="center">
                     <onyks-avatar class="avatar" size="m":src="profile_store.profile.avatar" @click="panels.toggle(0)"></onyks-avatar>
-                    <onyks-tile size="m" icon="F2CD" @click="router.push('/profile/manager/dashboard')"></onyks-tile>
+                    <!-- <onyks-tile size="m" icon="F2CD" @click="router.push('/profile/manager/dashboard')"></onyks-tile>
                     <onyks-tile size="m" icon="F224" @click="router.push('/profile/manager/management')"></onyks-tile>
                     <onyks-tile size="m" icon="F2D6" @click="router.push('/profile/manager/repository')"></onyks-tile>
                     <onyks-tile size="m" icon="F788" @click="router.push('/profile/manager/settings')"></onyks-tile>
-                    <onyks-tile size="m" icon="F678" @click="router.push('/profile/manager/admin')"></onyks-tile>
+                    <onyks-tile size="m" icon="F678" @click="router.push('/profile/manager/admin')"></onyks-tile> -->
                     <hr style="width: 100%;">
-                    <!-- <onyks-tile @click="panels.toggle(1)" size="m" icon="F8C4"></onyks-tile> -->
+                    <onyks-tile @click="panels.toggle(1)" size="m" icon="F8C4"></onyks-tile>
                     <onyks-tile @click="panels.toggle(2)" size="m" icon="F10D"></onyks-tile>
                     <onyks-tile @click="router.push('/profile/settings')" size="m" icon="F3E3"></onyks-tile>
                 </onyks-container>
-                
-
-
-                <!-- <onyks-tile size="m" icon="F56B"></onyks-tile>
-                <onyks-tile size="m" icon="F44C"></onyks-tile>
-                <onyks-tile size="m" icon="F10D"></onyks-tile> -->
-
-                <!-- <onyks-tile @click="panels.toggle(1)" size="m" icon="F8C4"></onyks-tile>
-                <onyks-tile @click="panels.toggle(2)" size="m" icon="F10D"></onyks-tile>
-                <onyks-tile @click="router.push('/profile/settings')" size="m" icon="F3E3"></onyks-tile> -->
             </onyks-panel>
         </onyks-container>
         <onyks-container class="content">

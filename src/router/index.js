@@ -5,6 +5,7 @@ import RepositoryView from '../views/profile/RepositoryView.vue'
 import SettingsView from '../views/profile/SettingsView.vue'
 import CreateProfileView from '../views/CreateProfileView.vue'
 import { useAuthStore } from '@bloodstone/stores/auth';
+import EditProfileView from '../views/EditProfileView.vue'
 
 const routes = [
   {
@@ -19,6 +20,10 @@ const routes = [
   {
     path: '/create-profile',
     component: CreateProfileView
+  },
+  {
+    path: '/edit-profile',
+    component: EditProfileView
   },
   {
     path: '/profile',

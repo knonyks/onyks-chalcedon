@@ -18,11 +18,11 @@ const profile = () =>
         {
             address: ''
         },
-        // database:
-        // {
-        //     autoupdate: false,
-        //     interval: 60
-        // }
+        database:
+        {
+            autoupdate: false,
+            interval: 60
+        }
     }
 }
 
