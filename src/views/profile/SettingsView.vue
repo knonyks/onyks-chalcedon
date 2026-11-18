@@ -26,8 +26,8 @@
     <Page title="Settings">
         <SettingsForm v-model="profile_copy"></SettingsForm>
         <onyks-container type="group" gap="m" justify="end">
-            <onyks-button background="green" @click="handle_save">Save</onyks-button>
-            <onyks-button @click="handle_restore">Restore</onyks-button>
+            <onyks-button animated background="green" @click="handle_save">Save</onyks-button>
+            <onyks-button animated @click="handle_restore">Restore</onyks-button>
         </onyks-container>
     </Page>
 </template>

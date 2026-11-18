@@ -2,7 +2,7 @@
     import get_random_emoji from '../utils/emoji';
     import { open } from '@tauri-apps/plugin-dialog';
     import { reactive, ref } from 'vue';
-    import ImportExportDialog from './composables/ImportExportDialog.vue';
+    import ImportExportDialog from './ImportExportDialog.vue';
     import { export_profile_to_base64 } from '../utils/profile.js';
 
 
@@ -17,8 +17,6 @@
         export_current_text: '',
         handle_export: () =>
         {
-            console.log('xxx')
-            console.log(model.value)
             import_export_dialog.export_current_text = export_profile_to_base64(model.value)
             import_export_dialog.export = true
         }
@@ -38,7 +36,7 @@
 <template>
     <onyks-container gap="m" type="stack" align="start">
         <onyks-container type="group" gap="m">
-            <onyks-button background="lime" @click="import_export_dialog.export = true">Import</onyks-button>
+            <onyks-button background="lime" @click="import_export_dialog.import = true">Import</onyks-button>
             <onyks-button background="indigo" @click="import_export_dialog.handle_export">Export</onyks-button>
             <onyks-button background="teal">Test Connection</onyks-button>
         </onyks-container>
@@ -97,8 +95,8 @@
             <onyks-textfield v-model="model.database.interval" type="number" class="textfield"></onyks-textfield>
         </onyks-container>
 
-        <ImportExportDialog v-model="import_export_dialog.export_current_text" v-model:open="import_export_dialog.export"></ImportExportDialog>
-        <!-- <ImportExportDialog type="import" v-model:open="import_export_dialog.import"></ImportExportDialog> -->
+        <ImportExportDialog v-model:open="import_export_dialog.export" v-model="model"></ImportExportDialog>
+        <ImportExportDialog type="import" v-model:open="import_export_dialog.import" v-model="model"></ImportExportDialog>
     </onyks-container>
 </template>
 
