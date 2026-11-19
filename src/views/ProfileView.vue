@@ -6,67 +6,12 @@
     import { usePanels } from '../components/composables/usePanels.js';
     import { useProfileStore } from '../stores/profile.js';
     import ProfilePanel from '../components/panels/ProfilePanel.vue';
-    import { useAuthStore } from '@bloodstone/stores/auth';
-    import { set_api } from '@bloodstone/utils/api';
-    import axios from 'axios';
-    import { fetch as tauriFetch } from '@tauri-apps/plugin-http'
+    import { useLoaderStore } from '@bloodstone/stores/loader';
 
-    // const auth_store = useAuthStore()
-
-    // let api = axios.create(
-    // {
-    //     baseURL: 'http://localhost:8113/api/',
-    //     timeout: 5000,
-    //     withCredentials: true,
-    // });
-
-    // api.defaults.adapter = 'fetch'
-    // api.defaults.env = { fetch: tauriFetch }
-
-    // api.interceptors.request.use((config) => 
-    // {
-    //     const token = localStorage.getItem('token')
-    //     if (token) config.headers.Authorization = `Bearer ${token}`
-    //     return config
-    // })
-
-    // api.interceptors.response.use(
-    //     (res) => res,
-    //     async (err) => 
-    //     {
-    //         const original = err.config
-    //         const is_auth_call = AUTH_URLS.some((u) => original?.url?.includes(u))
-
-    //         if (err.response?.status === 401 && !is_auth_call && !original._retry) 
-    //         {
-    //             original._retry = true
-    //             const auth = useAuthStore()
-    //             try 
-    //             {
-    //                 await auth.refresh()
-    //                 original.headers.Authorization = `Bearer ${auth.token}`
-    //                 return api(original)
-    //             } 
-    //             catch 
-    //             {
-    //                 auth.clear()
-    //                 router.push({ name: 'login', query: { redirect: router.currentRoute.value.fullPath } })
-    //             }
-    //     }
-    //     return Promise.reject(err)
-    //     }
-    // )
-
-    // set_api(api)
-
+    const loaderStore = useLoaderStore()
     const panels = reactive(usePanels(3))
     const router = useRouter()
     const profile_store = useProfileStore()
-
-    onMounted(async () => 
-    {
-        // await auth_store.login('admin', 'admin')
-    })
 </script>
 
 <template>
@@ -75,13 +20,12 @@
             <onyks-panel class="menu" padding="s">
                 <onyks-container gap="s" align="center">
                     <onyks-avatar class="avatar" size="m":src="profile_store.profile.avatar" @click="panels.toggle(0)"></onyks-avatar>
-                    <!-- <onyks-tile size="m" icon="F2CD" @click="router.push('/profile/manager/dashboard')"></onyks-tile>
+                    <onyks-tile size="m" icon="F2CD" @click="router.push('/profile/manager/dashboard')"></onyks-tile>
                     <onyks-tile size="m" icon="F224" @click="router.push('/profile/manager/management')"></onyks-tile>
                     <onyks-tile size="m" icon="F2D6" @click="router.push('/profile/manager/repository')"></onyks-tile>
-                    <onyks-tile size="m" icon="F788" @click="router.push('/profile/manager/settings')"></onyks-tile>
-                    <onyks-tile size="m" icon="F678" @click="router.push('/profile/manager/admin')"></onyks-tile> -->
+                    <!-- <onyks-tile size="m" icon="F788" @click="router.push('/profile/manager/settings')"></onyks-tile> -->
+                    <!-- <onyks-tile size="m" icon="F678" @click="router.push('/profile/manager/admin')"></onyks-tile> -->
                     <hr style="width: 100%;">
-                    <onyks-tile @click="panels.toggle(1)" size="m" icon="F8C4"></onyks-tile>
                     <onyks-tile @click="panels.toggle(2)" size="m" icon="F10D"></onyks-tile>
                     <onyks-tile @click="router.push('/profile/settings')" size="m" icon="F3E3"></onyks-tile>
                 </onyks-container>
@@ -98,7 +42,9 @@
                         <component :is="Component" :key="route.fullPath" />
                     </Transition>
                 </router-view>
+                <onyks-loader scroll-container=".manager-view" :isLoading.prop="loaderStore.isLoading" reset-scroll></onyks-loader>
             </onyks-container>
+            
         </onyks-container>
     </onyks-container>
 </template>
@@ -118,6 +64,7 @@
     {
         height: 100%;
         box-sizing: border-box;
+        z-index: 2000;
     }
 
     .avatar
@@ -152,11 +99,11 @@
         min-height: 0;
         min-width: 0;
         overflow-y: auto;
+        position: relative;
     }
 
     .subcontent
     {
         margin: 0 auto 0 auto;
-        max-width: 1024px;
     }
 </style>

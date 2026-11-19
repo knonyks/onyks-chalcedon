@@ -4,6 +4,9 @@
     import SettingsForm from '../../components/SettingsForm.vue'
     import { useProfileStore } from '../../stores/profile.js';
     import { OnyksToastContainer } from 'onyks-web-ui';
+    import { useLoaderStore } from '@bloodstone/stores/loader';
+
+    const loaderStore = useLoaderStore()
     
     const profile_store = useProfileStore()
     const profile_copy = ref({ ...profile_store.profile })
@@ -20,6 +23,8 @@
         profile_copy.value = { ...profile_store.profile }
         OnyksToastContainer.success('Przywrócono ustawienia')
     }
+
+    loaderStore.hide()
 </script>
 
 <template>

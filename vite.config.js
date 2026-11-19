@@ -1,11 +1,13 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { fileURLToPath, URL } from "node:url";
+import vueDevTools from 'vite-plugin-vue-devtools'
+
 
 const host = process.env.TAURI_DEV_HOST;
 
 export default defineConfig(async () => ({
-  plugins: [vue({
+  plugins: [vueDevTools(), vue({
     template: {
       compilerOptions: {
         isCustomElement: (tag) => tag.startsWith('onyks-')
@@ -32,5 +34,8 @@ export default defineConfig(async () => ({
     watch: {
       ignored: ["**/src-tauri/**"],
     },
+  },
+    devtools: {
+    apply: 'serve',
   },
 }));

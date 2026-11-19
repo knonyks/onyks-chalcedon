@@ -2,31 +2,32 @@ import { useAuthStore } from '@bloodstone/stores/auth';
 import { set_api } from '@bloodstone/utils/api';
 import axios from 'axios';
 import { fetch as tauriFetch } from '@tauri-apps/plugin-http'
-
+import router from '../router';
 
 const AUTH_URLS = ['/auth/login', '/auth/refresh', '/auth/logout']
 
 let api = null
+let refresh_promise = null
 
 export const set_new_api = (url) =>
 {
     api = axios.create(
     {
-        baseURL: url + '/api',
+        baseURL: url.replace(/\/+$/, '') + '/api',
         timeout: 5000,
         withCredentials: true,
     });
-
-    console.log(api)
-
-    console.log(url + '/api')
 
     api.defaults.adapter = 'fetch'
     api.defaults.env = { fetch: tauriFetch }
 
     api.interceptors.request.use((config) => 
     {
-        const token = localStorage.getItem('token')
+        const is_auth_call = AUTH_URLS.some((u) => config.url?.includes(u))
+        if (is_auth_call) return config
+
+        const auth = useAuthStore()
+        const token = auth.token || localStorage.getItem('token')
         if (token) config.headers.Authorization = `Bearer ${token}`
         return config
     })
@@ -44,14 +45,26 @@ export const set_new_api = (url) =>
             const auth = useAuthStore()
             try 
             {
-                await auth.refresh()
-                original.headers.Authorization = `Bearer ${auth.token}`
+                if (!refresh_promise)
+                {
+                    refresh_promise = auth.refresh().finally(() =>
+                    {
+                        refresh_promise = null
+                    })
+                }
+                await refresh_promise
+                const token = auth.token || localStorage.getItem('token')
+                if (!token) throw new Error('Authentication refresh returned no token')
+                original.headers = original.headers || {}
+                original.headers.Authorization = `Bearer ${token}`
                 return api(original)
             } 
-            catch 
+            catch(e)
             {
+                console.log(e)
                 auth.clear()
                 router.push('/start')
+                return Promise.reject(err)
             }
         }
         return Promise.reject(err)

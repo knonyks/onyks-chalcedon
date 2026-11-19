@@ -9,7 +9,7 @@
     import { useAuthStore } from '@bloodstone/stores/auth';
     import { set_new_api } from '../utils/api.js';
     import { OnyksToastContainer } from 'onyks-web-ui';
-import AboutProgramDialog from '../components/AboutProgramDialog.vue';
+    import AboutProgramDialog from '../components/AboutProgramDialog.vue';
 
     const profile_store = useProfileStore()
     const profile_selector = reactive(useProfileSelector())
