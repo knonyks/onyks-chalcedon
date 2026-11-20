@@ -4,11 +4,11 @@
     import { reactive, ref } from 'vue';
     import ImportExportDialog from './ImportExportDialog.vue';
     import { export_profile_to_base64 } from '../utils/profile.js';
+    import { schemas } from '../schemas/profile.js';
 
 
-    const model = defineModel()
-    model.value.web_manager ??= { address: '' }
-    model.value.repository ??= { address: '', autoupdate: false, interval: 60 }
+    const model = defineModel({default: schemas.profile()})
+
 
     const import_export_dialog = reactive(
     {

@@ -42,10 +42,10 @@ const routes = [
         children:
         [
           { 
-            path: 'dashboard', 
+            path: 'dashboard',
             component: () => import('@bloodstone/views/DashboardView.vue')
           },
-          { path: 'management', component: () => import('@bloodstone/views/ManagementView.vue') },
+          { path: 'management', component: () => import('@bloodstone/views/ManagementView.vue'), name: 'management' },
           { path: 'repository', component: () => import('@bloodstone/views/RepositoryView.vue') },
           { path: 'settings', component: () => import('@bloodstone/views/SettingsView.vue') },
           { path: 'admin', component: () => import('@bloodstone/views/AdminView.vue') },

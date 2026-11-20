@@ -21,6 +21,7 @@ const profile = () =>
         database:
         {
             autoupdate: false,
+            address: '',
             interval: 60
         }
     }

@@ -26,3 +26,4 @@ tauri-plugin-stronghold = "2"
 tauri-plugin-store = "2"
 tauri-plugin-dialog = "2"
 tauri-plugin-http = { version = "2", features = ["cookies"] }
+tauri-plugin-fs = "2"

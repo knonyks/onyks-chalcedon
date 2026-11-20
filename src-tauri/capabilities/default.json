@@ -25,6 +25,7 @@
     "core:webview:allow-set-webview-position",
     "core:webview:allow-create-webview-window",
     "core:window:allow-set-focus",
-    "http:default"
+    "http:default",
+    "fs:default"
   ]
 }

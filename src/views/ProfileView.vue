@@ -12,6 +12,18 @@
     const panels = reactive(usePanels(3))
     const router = useRouter()
     const profile_store = useProfileStore()
+
+    import { ref } from 'vue'
+
+    const scroll_container = ref(null)
+
+    const resetScroll = () => 
+    {
+        if (scroll_container.value) 
+        {
+            scroll_container.value.scrollTop = 0
+        }
+    }
 </script>
 
 <template>
@@ -31,21 +43,22 @@
                 </onyks-container>
             </onyks-panel>
         </onyks-container>
-        <onyks-container class="content">
+        <onyks-container class="content" ref="scroll_container">
             <ProfilePanel v-model:open="panels.items[0]"></ProfilePanel>
             <DatabasePanel v-model:open="panels.items[1]"></DatabasePanel>
             <RepositoryPanel v-model:open="panels.items[2]"></RepositoryPanel>
             
             <onyks-container class="subcontent">
                 <router-view v-slot="{ Component, route }">
-                    <Transition name="fade" mode="out-in" appear>
+                    <Transition name="fade" mode="out-in" appear @after-leave="resetScroll">
                         <component :is="Component" :key="route.fullPath" />
                     </Transition>
+                    <onyks-container style="height: 200px;"></onyks-container>
                 </router-view>
-                <onyks-loader scroll-container=".manager-view" :isLoading.prop="loaderStore.isLoading" reset-scroll></onyks-loader>
             </onyks-container>
             
         </onyks-container>
+        <onyks-loader scroll-container=".subcontent" :isLoading.prop="loaderStore.isLoading" reset-scroll></onyks-loader>
     </onyks-container>
 </template>
 
@@ -105,5 +118,11 @@
     .subcontent
     {
         margin: 0 auto 0 auto;
+    }
+
+    onyks-loader
+    {
+        position: relative;
+        z-index: 20;
     }
 </style>
