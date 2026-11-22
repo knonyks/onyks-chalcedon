@@ -33,7 +33,7 @@
                 <onyks-container gap="s" align="center">
                     <onyks-avatar class="avatar" size="m":src="profile_store.profile.avatar" @click="panels.toggle(0)"></onyks-avatar>
                     <onyks-tile size="m" icon="F2CD" @click="router.push('/profile/manager/dashboard')"></onyks-tile>
-                    <!-- <onyks-tile size="m" icon="F224" @click="router.push('/profile/manager/management')"></onyks-tile> -->
+                    <onyks-tile size="m" icon="F224" @click="router.push('/profile/manager/management')"></onyks-tile>
                     <onyks-tile size="m" icon="F2D6" @click="router.push('/profile/manager/repository')"></onyks-tile>
                     <onyks-tile size="m" icon="F788" @click="router.push('/profile/manager/settings')"></onyks-tile>
                     <onyks-tile size="m" icon="F678" @click="router.push('/profile/manager/admin')"></onyks-tile>
@@ -77,7 +77,6 @@
     {
         height: 100%;
         box-sizing: border-box;
-        z-index: 2000;
         padding-right: 0;
     }
 

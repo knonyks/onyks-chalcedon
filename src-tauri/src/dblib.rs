@@ -10,11 +10,38 @@ pub struct Field {
 }
 
 #[tauri::command]
-pub fn dblib_generate_dsn(path: &str, file_name: &str) -> Result<(), String> {
+pub fn dblib_generate_dsn(
+	path: &str,
+	file_name: &str,
+	server: &str,
+	port: u16,
+	database: &str,
+    username: &str,
+    password: &str,
+	sslmode: &str,
+) -> Result<(), String> {
+	let sslmode = sslmode.trim().to_ascii_lowercase();
+    if !matches!(
+        sslmode.as_str(),
+        "disable" | "allow" | "prefer" | "require" | "verify-ca" | "verify-full"
+    ) {
+        return Err(
+            "sslmode: disable, allow, prefer, require, verify-ca or verify-full".to_string(),
+        );
+	}
+
+    let pqopt = if sslmode == "disable" {
+		String::new()
+	} else {
+		"pqopt={sslnegotiation=direct}\n".to_string()
+	};
+
 	let file_path = Path::new(path).join(format!("{file_name}.dsn"));
 	std::fs::write(
 		file_path,
-		format!("[ODBC]\nDRIVER=DuckDB Driver\nDatabase={path}\\{file_name}.duckdb\n"),
+		format!(
+            "[ODBC]\nDRIVER=PostgreSQL Unicode(x64)\nSERVER={server}\nPORT={port}\nDATABASE={database}\nUID={username}\nPWD={password}\nSSLMODE={sslmode}\n{pqopt}",
+		),
 	)
 	.map_err(|error| error.to_string())
 }
@@ -22,18 +49,20 @@ pub fn dblib_generate_dsn(path: &str, file_name: &str) -> Result<(), String> {
 #[tauri::command(async)]
 pub fn dblib_save(path: &str, file_name: &str, content: &str) -> Result<(), String> {
     let file_path = Path::new(path).join(format!("{file_name}.DbLib"));
-    std::fs::write(
-		file_path,
-		format!("{content}\n")
-	)
-    .map_err(|error| error.to_string())
+    std::fs::OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open(file_path)
+        .and_then(|mut file| {
+            std::io::Write::write_all(&mut file, format!("{content}\n").as_bytes())
+        })
+        .map_err(|error| error.to_string())
 }
 
 #[tauri::command(async)]
-pub fn dblib_connectionstring(user: &str, source: &str) -> String {
-    format!(
-        "ConnectionString=Provider=MSDASQL.1;Persist Security Info=False;User ID={user};Data Source={source}"
-    )
+pub fn dblib_connectionstring(dsn_path: &str) -> String {
+    format!("FILE NAME={dsn_path}")
 }
 
 #[tauri::command(async)]
@@ -60,7 +89,7 @@ pub fn dblib_init(schema_name: &str, connection_string: &str, last_focused_table
         OrcadMultiValueDelimiter=,\n\
         SearchSubDirectories=0\n\
         SchemaName={schema_name}\n\
-        LastFocusedTable={last_focused_table}"
+        LastFocusedTable={last_focused_table}\n"
     )
 }
 
@@ -116,7 +145,7 @@ pub fn dblib_fieldmap(index: u32, table_name: &str, field_name: &str,
 pub fn dblib_generate_fields(index: u32, table_name: &str, fields: Vec<Field>) -> String {
     let mut sekcje = Vec::new();
     let mut nr = index;
-
+    sekcje.push(String::new());
     for pole in fields {
         let sekcja = dblib_fieldmap(
             nr,
@@ -142,8 +171,8 @@ mod tests {
 
     #[test]
     fn save_and_read() {
-        let folder = std::env::temp_dir();                 // folder tymczasowy systemu
-        let folder_str = folder.to_str().unwrap();         // PathBuf → &str
+        let folder = std::env::temp_dir();
+        let folder_str = folder.to_str().unwrap();
 
         dblib_save(folder_str, "test_dblib", "abc").unwrap();
 

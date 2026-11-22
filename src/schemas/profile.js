@@ -17,7 +17,8 @@ const profile = () =>
         },
         web_manager:
         {
-            address: ''
+            address: '',
+            port: 0
         },
         database:
         {
