@@ -73,7 +73,7 @@
 
 <template>
     <onyks-container class="profiles-container" align="center" justify="center">
-        <onyks-container padding="l" gap="m" class="profiles-content">
+        <onyks-container padding="l" gap="l" class="profiles-content">
             <Logos></Logos>
             <onyks-container cols="2" type="grid" class="profiles-subcontent" gap="m">
                 <onyks-container gap="m" class="profile-selector-container">

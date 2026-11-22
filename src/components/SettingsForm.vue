@@ -80,20 +80,22 @@
         <onyks-container type="grid" cols="2" class="settings" gap="m">
             <onyks-container justify="center"><onyks-text>Address</onyks-text></onyks-container>
             <onyks-textfield class="textfield" v-model="model.repository.address"></onyks-textfield>
-            <onyks-container justify="center"><onyks-text>Autoupdate</onyks-text></onyks-container>
-            <onyks-checkbox size="m" :checked="model.repository.autoupdate" @click="model.repository.autoupdate = !model.repository.autoupdate"></onyks-checkbox>
-            <onyks-container justify="center"><onyks-text>Autoupdate Interval (in minutes)</onyks-text></onyks-container>
-            <onyks-textfield v-model="model.repository.interval" type="number" class="textfield"></onyks-textfield>
+            <onyks-container justify="center"><onyks-text>Name</onyks-text></onyks-container>
+            <onyks-textfield class="textfield" v-model="model.repository.name"></onyks-textfield>
+            <!-- <onyks-container justify="center"><onyks-text>Autoupdate</onyks-text></onyks-container> -->
+            <!-- <onyks-checkbox size="m" :checked="model.repository.autoupdate" @click="model.repository.autoupdate = !model.repository.autoupdate"></onyks-checkbox> -->
+            <!-- <onyks-container justify="center"><onyks-text>Autoupdate Interval (in minutes)</onyks-text></onyks-container> -->
+            <!-- <onyks-textfield v-model="model.repository.interval" type="number" class="textfield"></onyks-textfield> -->
         </onyks-container>
 
-        <onyks-header size="l">Database</onyks-header>
+        <!-- <onyks-header size="l">Database</onyks-header> -->
 
-        <onyks-container type="grid" cols="2" class="settings" gap="m">
-            <onyks-container justify="center"><onyks-text>Autoupdate</onyks-text></onyks-container>
-            <onyks-checkbox :checked="model.database.autoupdate" @click="model.database.autoupdate = !model.database.autoupdate" size="m"></onyks-checkbox>
-            <onyks-container justify="center"><onyks-text>Autoupdate Interval (in minutes)</onyks-text></onyks-container>
-            <onyks-textfield v-model="model.database.interval" type="number" class="textfield"></onyks-textfield>
-        </onyks-container>
+        <!-- <onyks-container type="grid" cols="2" class="settings" gap="m"> -->
+            <!-- <onyks-container justify="center"><onyks-text>Autoupdate</onyks-text></onyks-container> -->
+            <!-- <onyks-checkbox :checked="model.database.autoupdate" @click="model.database.autoupdate = !model.database.autoupdate" size="m"></onyks-checkbox> -->
+            <!-- <onyks-container justify="center"><onyks-text>Autoupdate Interval (in minutes)</onyks-text></onyks-container> -->
+            <!-- <onyks-textfield v-model="model.database.interval" type="number" class="textfield"></onyks-textfield> -->
+        <!-- </onyks-container> -->
 
         <ImportExportDialog v-model:open="import_export_dialog.export" v-model="model"></ImportExportDialog>
         <ImportExportDialog type="import" v-model:open="import_export_dialog.import" v-model="model"></ImportExportDialog>

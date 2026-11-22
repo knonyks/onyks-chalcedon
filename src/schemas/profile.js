@@ -11,6 +11,7 @@ const profile = () =>
         repository:
         {
             address: '',
+            name: '',
             autoupdate: false,
             interval: 60,
         },

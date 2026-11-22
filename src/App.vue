@@ -20,7 +20,8 @@
         </transition>
     </router-view>
     <onyks-container padding="m" class="toast-container">
-        <onyks-toast-container class="toast-container-content"></onyks-toast-container>
+        <onyks-toast-container class="toast-container-content">
+        </onyks-toast-container>
     </onyks-container>
 </template>
 

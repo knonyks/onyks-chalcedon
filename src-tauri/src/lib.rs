@@ -324,7 +324,16 @@ pub fn run() {
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
-            dblib::dblib_generate_dsn
+            dblib::dblib_generate_dsn,
+            is_svn_repository,
+            svn_status,
+            svn_checkout,
+            svn_add_all,
+            svn_commit,
+            svn_update,
+            svn_revert,
+            svn_cleanup,
+            svn_delete,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
