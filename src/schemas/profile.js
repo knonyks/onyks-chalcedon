@@ -11,6 +11,7 @@ const profile = () =>
         repository:
         {
             address: '',
+            name: '',
             autoupdate: false,
             interval: 60,
         },
@@ -21,6 +22,7 @@ const profile = () =>
         database:
         {
             autoupdate: false,
+            address: '',
             interval: 60
         }
     }

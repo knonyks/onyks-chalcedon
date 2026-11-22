@@ -46,6 +46,9 @@ pub fn svn_checkout(
     password: &str,
     url: &str,
 ) -> Result<Vec<String>, String> {
+    std::fs::create_dir_all(svn_folder_path)
+        .map_err(|e| format!("Błąd utworzenia folderu: {}", e))?;
+
     let mut command = Command::new("svn");
     #[cfg(target_os = "windows")]
     command.creation_flags(0x08000000);

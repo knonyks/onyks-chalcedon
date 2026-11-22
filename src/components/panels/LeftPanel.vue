@@ -5,9 +5,9 @@
 
 <template>
     <onyks-container padding="m" class="panel" :class="{ open }">
-        <onyks-panel class="subpanel">
+        <onyks-panel class="subpanel" padding="s">
             <onyks-container class="content" gap="m" padding="s">
-                <onyks-header v-if="props.title != ''" level="3">{{ props.title }}</onyks-header>
+                <onyks-header v-if="props.title != ''" size="xl">{{ props.title }}</onyks-header>
                 <slot></slot>
             </onyks-container>
         </onyks-panel>
@@ -20,7 +20,7 @@
         height: 100vh;
         box-sizing: border-box;
         position: fixed;
-        padding-left: 0;
+        padding-left: var(--onyks-spacing-sm);
         width: fit-content;
         opacity: 0;
         visibility: hidden;
@@ -45,5 +45,6 @@
         width: fit-content;
         height: 100%;
         box-sizing: border-box;
+        overflow-y: auto;
     }
 </style>

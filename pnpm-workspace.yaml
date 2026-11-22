@@ -1,3 +1,3 @@
 allowBuilds:
   esbuild: false
-  onyks-web-ui@https://codeload.github.com/knonyks/onyks-web-ui/tar.gz/4188d1d9fdaa4377872e7863302c4ce65992e0b4: true
+  onyks-web-ui@https://codeload.github.com/knonyks/onyks-web-ui/tar.gz/dce085b9cb1b231945d664d36cdf392106a5a526: true

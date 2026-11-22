@@ -16,7 +16,7 @@
         {
             let index = await profile_store.add_profile(profile)
             profile_store.profile = await profile_store.load_profile(index)
-            router.push('/profile/settings')
+            router.push('/profile/manager/dashboard')
         }
         else
         {
@@ -29,8 +29,8 @@
     <Page title="Create Profile">
         <SettingsForm v-model="profile"></SettingsForm>
         <onyks-container type="group" gap="m" justify="end" align="center">
-            <onyks-button @click="router.push('/start')">Return</onyks-button>
-            <onyks-button @click="handle_create">Create</onyks-button>
+            <onyks-button @click="router.push('/start')" animated>Return</onyks-button>
+            <onyks-button @click="handle_create" animated background="blue">Create</onyks-button>
         </onyks-container>
     </Page>
 </template>

@@ -11,7 +11,7 @@
 <template>
     <onyks-container class="container" align="center">
         <onyks-container class="content" gap="xl" type="stack" padding="xl">
-            <onyks-header level="2">{{ props.title }}</onyks-header>
+            <onyks-header size="4xl">{{ props.title }}</onyks-header>
             <onyks-container gap="m">
                 <slot></slot>
             </onyks-container>

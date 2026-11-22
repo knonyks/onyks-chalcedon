@@ -8,6 +8,14 @@ export const usePanels = (count) =>
 
     onScopeDispose(() => clearTimeout(switch_timeout))
 
+    const hide_all = () =>
+    {
+        clearTimeout(switch_timeout)
+        switch_timeout = undefined
+        items.value.fill(false)
+        current_opened.value = -1
+    }
+
     const toggle = (index = -1) =>
     {
         if (index !== -1 && (!Number.isInteger(index) || index < 0 || index >= items.value.length))
@@ -56,5 +64,5 @@ export const usePanels = (count) =>
         items.value[index] = true
     }
 
-    return { items, toggle }
+    return { items, toggle, hide_all }
 }
