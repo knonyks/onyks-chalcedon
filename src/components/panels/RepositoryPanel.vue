@@ -7,6 +7,7 @@
     import { reactive } from 'vue';
     import { services } from '@bloodstone/utils/api';
     import { invoke } from '@tauri-apps/api/core';
+import { sleep } from '../../utils/tools.js';
     
     const profile_store = useProfileStore()
 
@@ -17,6 +18,26 @@
             pull: false,
             reset: false,
             revert: false
+        },
+        database:
+        {
+            update: false
+        }
+    })
+
+    const status = reactive({
+        repository:
+        {
+            text: 'Repository is ready to use',
+            state: false,
+            index: 0,
+            max: 100
+        },
+        database:
+        {
+            text: '',
+            index: 0,
+            max: 100
         }
     })
 
@@ -25,27 +46,78 @@
         switch(key)
         {
             case 'push':
+                if(status.repository.state)
+                    return
                 btns.repository.push = true
-                console.log(await repository.push(profile_store.profile.path + '\\' + profile_store.profile.repository.name, profile_store.profile.username, profile_store.profile.password))
+                status.repository.state = true
+                status.repository.text = "Pushing changes..."
+                status.repository.index = 30
+                await sleep(1000)
+                let result = await repository.push(profile_store.profile.path + '\\' + profile_store.profile.repository.name, profile_store.profile.username, profile_store.profile.password)
+                if(result)
+                {
+                    status.repository.text = "Repository is ready to use"
+                }
+                else
+                {
+                    status.repository.text = "Error..."
+                }
+                status.repository.index = 100
+                await sleep(1000)
+                status.repository.index = 0
                 btns.repository.push = false
+                status.repository.state = false
                 break;
 
             case 'pull':
+                if(status.repository.state)
+                    return
                 btns.repository.pull = true
-                console.log(await repository.pull(profile_store.profile.path + '\\' + profile_store.profile.repository.name, profile_store.profile.username, profile_store.profile.password, profile_store.profile.repository.address))
+                status.repository.state = true
+                status.repository.text = "Pulling changes..."
+                status.repository.index = 30
+                await sleep(1000)
+                const pullResult = await repository.pull(profile_store.profile.path + '\\' + profile_store.profile.repository.name, profile_store.profile.username, profile_store.profile.password, profile_store.profile.repository.address)
+                status.repository.text = pullResult ? "Repository is ready to use" : "Error..."
+                status.repository.index = 100
+                await sleep(1000)
+                status.repository.index = 0
                 btns.repository.pull = false
+                status.repository.state = false
                 break;
 
             case 'reset':
+                if(status.repository.state)
+                    return
                 btns.repository.reset = true
-                console.log(await repository.reset(profile_store.profile.path + '\\' + profile_store.profile.repository.name))
+                status.repository.state = true
+                status.repository.text = "Resetting repository..."
+                status.repository.index = 30
+                await sleep(1000)
+                const resetResult = await repository.reset(profile_store.profile.path + '\\' + profile_store.profile.repository.name)
+                status.repository.text = resetResult ? "Repository is ready to use" : "Error..."
+                status.repository.index = 100
+                await sleep(1000)
+                status.repository.index = 0
                 btns.repository.reset = false
+                status.repository.state = false
                 break;
 
             case 'revert':
+                if(status.repository.state)
+                    return
                 btns.repository.revert = true
-                console.log(await repository.revert(profile_store.profile.path + '\\' + profile_store.profile.repository.name))
+                status.repository.state = true
+                status.repository.text = "Reverting changes..."
+                status.repository.index = 30
+                await sleep(1000)
+                const revertResult = await repository.revert(profile_store.profile.path + '\\' + profile_store.profile.repository.name)
+                status.repository.text = revertResult ? "Repository is ready to use" : "Error..."
+                status.repository.index = 100
+                await sleep(1000)
+                status.repository.index = 0
                 btns.repository.revert = false
+                status.repository.state = false
                 break;
 
             case 'explorer':
@@ -53,6 +125,13 @@
                 break;
 
             case 'update':
+                if (btns.database.update)
+                    return
+                btns.database.update = true
+                status.database.text = 'Generating DSN...'
+                status.database.index = 10
+                try
+                {
                 console.log(await invoke('dblib_generate_dsn', {
                     path: profile_store.profile.path,
                     fileName: profile_store.profile.name,
@@ -64,17 +143,27 @@
                     sslmode: 'require'
                 }))
 
+                await sleep(1000)
+                status.database.text = 'Generating connection string...'
+                status.database.index = 20
+
                 const connectionString = await invoke<string>('dblib_connectionstring', {
                     dsnPath: profile_store.profile.path + '\\' + profile_store.profile.name + '.dsn'
                 })
 
                 console.log(connectionString)
-
+                await sleep(1000)
+                status.database.text = 'Initializing *.DbLib file...'
+                status.database.index = 30
                 let content = await invoke<string>('dblib_init', {
                     schemaName: '',
                     connectionString,
                     lastFocusedTable: ''
                 })
+
+                await sleep(1000)
+                status.database.text = 'Downloading list of tables...'
+                status.database.index = 40
 
                 let tables = await services.tables.list()
                 const allTables = [...tables.data.items]
@@ -93,6 +182,10 @@
                     tables = nextTables
                 }
 
+                await sleep(1000)
+                status.database.text = 'Downloading list of suppliers...'
+                status.database.index = 50
+
                 let suppliers = await services.suppliers.list()
                 const allSuppliers = [...suppliers.data.items]
 
@@ -110,7 +203,9 @@
                     suppliers = nextSuppliers
                 }
 
-                console.log(suppliers)
+                await sleep(1000)
+                status.database.text = 'Configuring the *.DbLib file...'
+                status.database.index = 60
 
                 const fields = [
                     { key: 'uuid',                  fieldType: 0, label: 'UUID' },
@@ -139,6 +234,7 @@
                 content += await invoke<string>('dblib_generate_tables', {
                     tableNames: allTables.map(table => table.name)
                 })
+                status.database.index = 70
 
                 let fieldIndex = 1
                 for (const table of allTables)
@@ -154,6 +250,11 @@
                     })
                     fieldIndex += fields.length
                 }
+                status.database.index = 85
+
+                await sleep(1000)
+                status.database.text = 'Saving configuration...'
+                status.database.index = 90
 
                 // SAVE
                 console.log(await invoke('dblib_save', {
@@ -162,6 +263,22 @@
                     content
                 }))
 
+                status.database.text = 'Database is ready to use'
+                status.database.index = 100
+                }
+                catch (error)
+                {
+                    console.error('Database update failed:', error)
+                    status.database.text = 'Database update failed'
+                    status.database.index = 100
+                }
+                finally
+                {
+                    await sleep(1000)
+                    status.database.index = 0
+                    btns.database.update = false
+                }
+
                 break;
         }
     }
@@ -169,7 +286,12 @@
 
 <template>
     <LeftPanel title="Repository" class="panel">
-        <!-- <onyks-alert class="alert">Last update: 22.22.2026, 12:22:2321</onyks-alert> -->
+        <onyks-alert class="alert" type="warning">
+            <onyks-container type="stack" gap="m" class="btns-container">
+                <onyks-text>{{ status.repository.text }}</onyks-text>
+                <onyks-loading-bar animated striped :current-state="status.repository.index" :max="status.repository.max"></onyks-loading-bar>
+            </onyks-container>
+        </onyks-alert>
         <onyks-container type="grid" cols="2" gap="m" class="btns-container">
             <onyks-button  class="btn" background="green" @click="handle_click('push')" :disabled="btns.repository.push">Push</onyks-button>
             <onyks-button  class="btn" background="blue" @click="handle_click('pull')" :disabled="btns.repository.pull">Pull</onyks-button>
@@ -178,9 +300,14 @@
             <onyks-button  class="btn" background="gray" @click="handle_click('explorer')">Explorer</onyks-button>
         </onyks-container>
         <onyks-header size="xl">Database</onyks-header>
-        <!-- <onyks-alert class="alert">Last update: 22.22.2026, 12:22:2321</onyks-alert> -->
+        <onyks-alert class="alert" type="warning">
+            <onyks-container type="stack" gap="m" class="alert-content">
+                <onyks-text>{{ status.database.text || 'Database is ready to use' }}</onyks-text>
+                <onyks-loading-bar animated striped :current-state="status.database.index" :max="status.database.max"></onyks-loading-bar>
+            </onyks-container>
+        </onyks-alert>
         <onyks-container type="grid" cols="2" gap="m" class="btns-container">
-            <onyks-button @click="handle_click('update')">Update</onyks-button>
+            <onyks-button :disabled="btns.database.update" @click="handle_click('update')">Update</onyks-button>
         </onyks-container>
     </LeftPanel>
 </template>
@@ -198,6 +325,11 @@
     }
 
     .btn
+    {
+        width: 100%;
+    }
+
+    .alert-content
     {
         width: 100%;
     }
