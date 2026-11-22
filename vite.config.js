@@ -20,7 +20,7 @@ export default defineConfig(async () => ({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
       '@bloodstone': fileURLToPath(new URL('../onyks-bloodstone/frontend/src', import.meta.url)),
     },
-    dedupe: ['vue', 'vue-router', 'pinia'],
+    dedupe: ['vue', 'vue-router', 'pinia', 'onyks-web-ui'],
   },
   clearScreen: false,
   server: {

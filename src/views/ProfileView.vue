@@ -9,7 +9,7 @@
     import { useLoaderStore } from '@bloodstone/stores/loader';
 
     const loaderStore = useLoaderStore()
-    const panels = reactive(usePanels(3))
+    const panels = reactive(usePanels(2))
     const router = useRouter()
     const profile_store = useProfileStore()
 
@@ -33,32 +33,32 @@
                 <onyks-container gap="s" align="center">
                     <onyks-avatar class="avatar" size="m":src="profile_store.profile.avatar" @click="panels.toggle(0)"></onyks-avatar>
                     <onyks-tile size="m" icon="F2CD" @click="router.push('/profile/manager/dashboard')"></onyks-tile>
-                    <onyks-tile size="m" icon="F224" @click="router.push('/profile/manager/management')"></onyks-tile>
+                    <!-- <onyks-tile size="m" icon="F224" @click="router.push('/profile/manager/management')"></onyks-tile> -->
                     <onyks-tile size="m" icon="F2D6" @click="router.push('/profile/manager/repository')"></onyks-tile>
-                    <!-- <onyks-tile size="m" icon="F788" @click="router.push('/profile/manager/settings')"></onyks-tile> -->
-                    <!-- <onyks-tile size="m" icon="F678" @click="router.push('/profile/manager/admin')"></onyks-tile> -->
+                    <onyks-tile size="m" icon="F788" @click="router.push('/profile/manager/settings')"></onyks-tile>
+                    <onyks-tile size="m" icon="F678" @click="router.push('/profile/manager/admin')"></onyks-tile>
                     <hr style="width: 100%;">
-                    <onyks-tile @click="panels.toggle(2)" size="m" icon="F10D"></onyks-tile>
+                    <onyks-tile @click="panels.toggle(1)" size="m" icon="F10D"></onyks-tile>
                     <onyks-tile @click="router.push('/profile/settings')" size="m" icon="F3E3"></onyks-tile>
                 </onyks-container>
             </onyks-panel>
         </onyks-container>
-        <onyks-container class="content" ref="scroll_container">
-            <ProfilePanel v-model:open="panels.items[0]"></ProfilePanel>
-            <DatabasePanel v-model:open="panels.items[1]"></DatabasePanel>
-            <RepositoryPanel v-model:open="panels.items[2]"></RepositoryPanel>
-            
-            <onyks-container class="subcontent">
-                <router-view v-slot="{ Component, route }">
-                    <Transition name="fade" mode="out-in" appear @after-leave="resetScroll">
-                        <component :is="Component" :key="route.fullPath" />
-                    </Transition>
-                    <onyks-container style="height: 200px;"></onyks-container>
-                </router-view>
+        <onyks-container class="content">
+            <onyks-container class="subcontent" ref="scroll_container">
+                <ProfilePanel v-model:open="panels.items[0]"></ProfilePanel>
+                <RepositoryPanel v-model:open="panels.items[1]"></RepositoryPanel>
+                
+                <onyks-container class="subsubcontent">
+                    <router-view v-slot="{ Component, route }">
+                        <Transition name="fade" mode="out-in" appear @after-leave="resetScroll">
+                            <component :is="Component" :key="route.fullPath" />
+                        </Transition>
+                        <onyks-container style="height: 200px;"></onyks-container>
+                    </router-view>
+                </onyks-container>
             </onyks-container>
-            
+            <onyks-loader scroll-container=".subcontent" :isLoading.prop="loaderStore.isLoading" reset-scroll></onyks-loader>
         </onyks-container>
-        <onyks-loader scroll-container=".subcontent" :isLoading.prop="loaderStore.isLoading" reset-scroll></onyks-loader>
     </onyks-container>
 </template>
 
@@ -78,6 +78,7 @@
         height: 100%;
         box-sizing: border-box;
         z-index: 2000;
+        padding-right: 0;
     }
 
     .avatar
@@ -111,12 +112,20 @@
         height: 100%;
         min-height: 0;
         min-width: 0;
-        overflow-y: auto;
+        /* overflow-y: auto; */
         position: relative;
     }
 
     .subcontent
     {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .subsubcontent
+    {
+        width: 100%;
         margin: 0 auto 0 auto;
     }
 

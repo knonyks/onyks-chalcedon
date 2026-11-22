@@ -20,7 +20,7 @@
         height: 100vh;
         box-sizing: border-box;
         position: fixed;
-        padding-left: 0;
+        padding-left: var(--onyks-spacing-sm);
         width: fit-content;
         opacity: 0;
         visibility: hidden;

@@ -5,7 +5,7 @@
     import ImportExportDialog from './ImportExportDialog.vue';
     import { export_profile_to_base64 } from '../utils/profile.js';
     import { schemas } from '../schemas/profile.js';
-
+    import { i18n } from '@bloodstone/utils/localization.js';
 
     const model = defineModel({default: schemas.profile()})
 
@@ -38,14 +38,14 @@
         <onyks-container type="group" gap="m">
             <onyks-button background="lime" @click="import_export_dialog.import = true">Import</onyks-button>
             <onyks-button background="indigo" @click="import_export_dialog.handle_export">Export</onyks-button>
-            <onyks-button background="teal">Test Connection</onyks-button>
+            <!-- <onyks-button background="teal">Test Connection</onyks-button> -->
         </onyks-container>
         <onyks-header size="l">Basics</onyks-header>
         <onyks-container type="grid" cols="2" class="settings" gap="m">
             <onyks-container justify="center"><onyks-text>Avatar</onyks-text></onyks-container>
             <onyks-container type="group" gap="m" align="center">
                 <onyks-avatar style="width: auto; height: auto;" size="m" :src="model.avatar"></onyks-avatar>
-                <onyks-button @click="model.avatar = get_random_emoji()">Random</onyks-button>
+                <onyks-button @click="model.avatar = get_random_emoji()">{{ i18n.global.t('common.select') }}</onyks-button>
             </onyks-container>
             <onyks-container justify="center"><onyks-text>Name</onyks-text></onyks-container>
             
