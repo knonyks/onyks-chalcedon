@@ -162,7 +162,7 @@ pub fn svn_update(svn_folder_path: &str, login: &str, password: &str) -> Result<
             password,
             "--trust-server-cert",
             "--non-interactive",
-            "--no-auth-cache"
+            "--no-auth-cache",
         ])
         .output()
         .map_err(|e| format!("Błąd wykonania komendy: {}", e))?;
@@ -181,11 +181,7 @@ pub fn svn_revert(svn_folder_path: &str) -> Result<String, String> {
 
     let output = command
         .current_dir(svn_folder_path)
-        .args([
-            "revert", 
-            "-R", 
-            "."
-        ])
+        .args(["revert", "-R", "."])
         .output()
         .map_err(|e| format!("Błąd wykonania komendy: {}", e))?;
     if output.status.success() {
@@ -203,10 +199,7 @@ pub fn svn_cleanup(svn_folder_path: &str) -> Result<String, String> {
 
     let output = command
         .current_dir(svn_folder_path)
-        .args([
-            "cleanup",
-            "--remove-unversioned",
-            ])
+        .args(["cleanup", "--remove-unversioned"])
         .output()
         .map_err(|e| format!("Błąd wykonania komendy: {}", e))?;
     if output.status.success() {

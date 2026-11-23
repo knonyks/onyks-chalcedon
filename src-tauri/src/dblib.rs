@@ -1,5 +1,5 @@
-use std::path::Path;
 use serde::Deserialize;
+use std::path::Path;
 
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -11,16 +11,16 @@ pub struct Field {
 
 #[tauri::command]
 pub fn dblib_generate_dsn(
-	path: &str,
-	file_name: &str,
-	server: &str,
-	port: u16,
-	database: &str,
+    path: &str,
+    file_name: &str,
+    server: &str,
+    port: u16,
+    database: &str,
     username: &str,
     password: &str,
-	sslmode: &str,
+    sslmode: &str,
 ) -> Result<(), String> {
-	let sslmode = sslmode.trim().to_ascii_lowercase();
+    let sslmode = sslmode.trim().to_ascii_lowercase();
     if !matches!(
         sslmode.as_str(),
         "disable" | "allow" | "prefer" | "require" | "verify-ca" | "verify-full"
@@ -28,16 +28,16 @@ pub fn dblib_generate_dsn(
         return Err(
             "sslmode: disable, allow, prefer, require, verify-ca or verify-full".to_string(),
         );
-	}
+    }
 
     let pqopt = if sslmode == "disable" {
-		String::new()
-	} else {
-		"pqopt={sslnegotiation=direct}\n".to_string()
-	};
+        String::new()
+    } else {
+        "pqopt={sslnegotiation=direct}\n".to_string()
+    };
 
-	let file_path = Path::new(path).join(format!("{file_name}.dsn"));
-	std::fs::write(
+    let file_path = Path::new(path).join(format!("{file_name}.dsn"));
+    std::fs::write(
 		file_path,
 		format!(
             "[ODBC]\nDRIVER=PostgreSQL Unicode(x64)\nSERVER={server}\nPORT={port}\nDATABASE={database}\nUID={username}\nPWD={password}\nSSLMODE={sslmode}\n{pqopt}",
@@ -95,7 +95,6 @@ pub fn dblib_init(schema_name: &str, connection_string: &str, last_focused_table
 
 #[tauri::command(async)]
 pub fn dblib_table(id: u32, name: &str, enabled: bool) -> String {
-    
     let enabled_str = if enabled { "True" } else { "False" };
     format!(
         "[Table{id}]\n\
@@ -122,10 +121,17 @@ pub fn dblib_generate_tables(table_names: Vec<String>) -> String {
 }
 
 #[tauri::command(async)]
-pub fn dblib_fieldmap(index: u32, table_name: &str, field_name: &str, 
-    field_type: u32, parameter_name: &str, visible_on_add: bool, 
-    add_mode: u32, remove_mode: u32, update_mode: u32) -> String {
-    
+pub fn dblib_fieldmap(
+    index: u32,
+    table_name: &str,
+    field_name: &str,
+    field_type: u32,
+    parameter_name: &str,
+    visible_on_add: bool,
+    add_mode: u32,
+    remove_mode: u32,
+    update_mode: u32,
+) -> String {
     let visible_str = if visible_on_add { "True" } else { "False" };
     format!(
         "[FieldMap{index}]\n\
